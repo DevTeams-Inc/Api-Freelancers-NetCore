@@ -35,13 +35,19 @@ namespace ApiTokenJWT.Controllers
 
         [Route("create")]
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] User model)
+        public async Task<IActionResult> CreateUser([FromBody] UserVm model)
         {
             if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email 
-                    , LastName = model.LastName
+            {                
+
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email, 
+                    LastName = model.LastName,
+                    Name = model.Name
                 };
+
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -61,7 +67,7 @@ namespace ApiTokenJWT.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] User userInfo)
+        public async Task<IActionResult> Login([FromBody] UserVm userInfo)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +89,7 @@ namespace ApiTokenJWT.Controllers
         }
 
         //con este metodo creamos el token
-        private IActionResult BuildToken(User model)
+        private IActionResult BuildToken(UserVm model)
         {
             var claims = new[]
             {
@@ -96,6 +102,11 @@ namespace ApiTokenJWT.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             //le colocamos un tiempo de expiracion en este caso 1 hora
             var expiration = DateTime.UtcNow.AddHours(1);
+
+
+            //preparamos el modelo
+              model.Password = null;
+              
 
             JwtSecurityToken token = new JwtSecurityToken(
                issuer: "yourdomain.com",

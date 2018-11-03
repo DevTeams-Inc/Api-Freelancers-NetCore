@@ -66,6 +66,9 @@ namespace ApiFreelancers
                    ClockSkew = TimeSpan.Zero
                });
 
+
+            ConfigureIdentity(services);
+
             services.AddMvc();
             services.AddMvc().AddJsonOptions(ConfigureJson);
 
@@ -74,6 +77,23 @@ namespace ApiFreelancers
         private void ConfigureJson(MvcJsonOptions obj)
         {
             obj.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        }
+
+        //configurando identity a mi manera
+        private void ConfigureIdentity(IServiceCollection services)
+        {
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+                options.User.RequireUniqueEmail = true;
+                
+            });
         }
 
 
