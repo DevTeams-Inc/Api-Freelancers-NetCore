@@ -14,5 +14,19 @@ namespace Model
         [Required]
         [StringLength(20)]
         public string Name { get; set; }
+        [StringLength(150)]
+        public string Avatar { get; set; }
+        [Required]
+        public int Role { get; set; }
+        [Required]
+        [StringLength(255)]
+        public string Address { get; set; }
+        [Required]
+        public DateTime CreatedAt { get; set; }
+        
+        public DateTime UpdateAt { get; set; }
+        
+        //propiedad de navegacion para conectar con el modelo freelancer
+        public Freelancer Freelancer { get; set; }
     }
 }

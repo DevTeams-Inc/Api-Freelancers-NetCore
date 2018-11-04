@@ -136,13 +136,24 @@ namespace Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Avatar")
+                        .HasMaxLength(150);
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<int?>("FreelancerId");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -168,14 +179,20 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<int>("Role");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<DateTime>("UpdateAt");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FreelancerId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -186,6 +203,75 @@ namespace Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Model.Freelancer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ApplicationUserId");
+
+                    b.Property<string>("Biography")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Historial")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Interest")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Lenguaje")
+                        .IsRequired()
+                        .HasMaxLength(15);
+
+                    b.Property<int>("Level");
+
+                    b.Property<decimal>("PriceHour");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("Testimony")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("UpdateAt");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Freelancer");
+                });
+
+            modelBuilder.Entity("Model.Hability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
+
+                    b.Property<int>("FreelancerId");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(150);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("UpdateAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FreelancerId");
+
+                    b.ToTable("Hability");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -230,6 +316,21 @@ namespace Persistence.Migrations
                     b.HasOne("Model.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Model.ApplicationUser", b =>
+                {
+                    b.HasOne("Model.Freelancer", "Freelancer")
+                        .WithMany()
+                        .HasForeignKey("FreelancerId");
+                });
+
+            modelBuilder.Entity("Model.Hability", b =>
+                {
+                    b.HasOne("Model.Freelancer")
+                        .WithMany("Habilities")
+                        .HasForeignKey("FreelancerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
