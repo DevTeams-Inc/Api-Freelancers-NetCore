@@ -129,6 +129,25 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Model.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<int>("ProposalId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProposalId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("Model.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -152,8 +171,6 @@ namespace Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<int?>("FreelancerId");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -192,8 +209,6 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FreelancerId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -205,13 +220,44 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Model.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Area")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Img")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("ProyectId");
+
+                    b.Property<DateTime>("UpdateAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProyectId")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Model.Freelancer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("Biography")
                         .HasMaxLength(255);
@@ -241,7 +287,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Freelancer");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Freelancers");
                 });
 
             modelBuilder.Entity("Model.Hability", b =>
@@ -271,7 +319,79 @@ namespace Persistence.Migrations
 
                     b.HasIndex("FreelancerId");
 
-                    b.ToTable("Hability");
+                    b.ToTable("Habilities");
+                });
+
+            modelBuilder.Entity("Model.Proposal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<decimal>("Offer");
+
+                    b.Property<int?>("ProyectId");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("UpdateAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProyectId")
+                        .IsUnique()
+                        .HasFilter("[ProyectId] IS NOT NULL");
+
+                    b.ToTable("Proposals");
+                });
+
+            modelBuilder.Entity("Model.Proyect", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<string>("Required_Skill")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Scope")
+                        .IsRequired();
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("UpdateAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Proyects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -319,11 +439,27 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Model.ApplicationUser", b =>
+            modelBuilder.Entity("Model.Answer", b =>
                 {
-                    b.HasOne("Model.Freelancer", "Freelancer")
+                    b.HasOne("Model.Proposal")
+                        .WithMany("Answers")
+                        .HasForeignKey("ProposalId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Model.Category", b =>
+                {
+                    b.HasOne("Model.Proyect")
+                        .WithOne("Category")
+                        .HasForeignKey("Model.Category", "ProyectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Model.Freelancer", b =>
+                {
+                    b.HasOne("Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("FreelancerId");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Model.Hability", b =>
@@ -331,6 +467,26 @@ namespace Persistence.Migrations
                     b.HasOne("Model.Freelancer")
                         .WithMany("Habilities")
                         .HasForeignKey("FreelancerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Model.Proposal", b =>
+                {
+                    b.HasOne("Model.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Model.Proyect")
+                        .WithOne("Proposal")
+                        .HasForeignKey("Model.Proposal", "ProyectId");
+                });
+
+            modelBuilder.Entity("Model.Proyect", b =>
+                {
+                    b.HasOne("Model.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

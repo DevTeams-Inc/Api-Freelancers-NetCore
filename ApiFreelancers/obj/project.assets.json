@@ -5211,6 +5211,20 @@
         "runtime": {
           "bin/placeholder/Repository.dll": {}
         }
+      },
+      "Service/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "Model": "1.0.0",
+          "Persistence": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Service.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Service.dll": {}
+        }
       }
     }
   },
@@ -13675,6 +13689,11 @@
       "type": "project",
       "path": "../Repository/Repository.csproj",
       "msbuildProject": "../Repository/Repository.csproj"
+    },
+    "Service/1.0.0": {
+      "type": "project",
+      "path": "../Service/Service.csproj",
+      "msbuildProject": "../Service/Service.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -13683,7 +13702,8 @@
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.3",
       "Persistence >= 1.0.0",
-      "Repository >= 1.0.0"
+      "Repository >= 1.0.0",
+      "Service >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -13721,6 +13741,9 @@
             },
             "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Repository\\Repository.csproj": {
               "projectPath": "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Repository\\Repository.csproj"
+            },
+            "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Service\\Service.csproj": {
+              "projectPath": "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Service\\Service.csproj"
             }
           }
         }

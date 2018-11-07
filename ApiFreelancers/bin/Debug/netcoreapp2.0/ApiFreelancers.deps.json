@@ -27,7 +27,8 @@
           "Microsoft.NETCore.App": "2.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.3",
           "Persistence": "1.0.0",
-          "Repository": "1.0.0"
+          "Repository": "1.0.0",
+          "Service": "1.0.0"
         },
         "runtime": {
           "ApiFreelancers.dll": {}
@@ -4233,6 +4234,18 @@
           "Repository.dll": {}
         }
       },
+      "Service/1.0.0": {
+        "dependencies": {
+          "Model": "1.0.0",
+          "Persistence": "1.0.0"
+        },
+        "runtime": {
+          "Service.dll": {}
+        },
+        "compile": {
+          "Service.dll": {}
+        }
+      },
       "Microsoft.NETCore.App/2.0.0": {
         "dependencies": {
           "Microsoft.NETCore.DotNetHostPolicy": "2.0.0",
@@ -6638,6 +6651,11 @@
       "sha512": ""
     },
     "Repository/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Service/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

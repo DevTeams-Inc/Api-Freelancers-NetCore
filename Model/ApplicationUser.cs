@@ -26,7 +26,6 @@ namespace Model
         
         public DateTime UpdateAt { get; set; }
         
-        //propiedad de navegacion para conectar con el modelo freelancer
-        public Freelancer Freelancer { get; set; }
+       
     }
 }

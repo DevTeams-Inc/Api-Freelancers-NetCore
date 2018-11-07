@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
 
 </Project>

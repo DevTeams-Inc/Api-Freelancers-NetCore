@@ -29,7 +29,9 @@ namespace Model
         public DateTime UpdateAt { get; set; }
 
         //id del usuario
-        public int ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }
+        
+        public ApplicationUser ApplicationUser { get; set; }
 
         public IEnumerable<Hability> Habilities { get; set; }
     }

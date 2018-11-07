@@ -16,3 +16,5 @@ C:\Users\orbis\Source\repos\ApiFreelancers\ApiFreelancers\bin\Debug\netcoreapp2.
 C:\Users\orbis\Source\repos\ApiFreelancers\ApiFreelancers\obj\Debug\netcoreapp2.0\ApiFreelancers.csproj.CopyComplete
 C:\Users\orbis\Source\repos\ApiFreelancers\ApiFreelancers\obj\Debug\netcoreapp2.0\ApiFreelancers.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\ApiFreelancers\obj\Debug\netcoreapp2.0\ApiFreelancers.pdb
+C:\Users\orbis\Source\repos\ApiFreelancers\ApiFreelancers\bin\Debug\netcoreapp2.0\Service.dll
+C:\Users\orbis\Source\repos\ApiFreelancers\ApiFreelancers\bin\Debug\netcoreapp2.0\Service.pdb

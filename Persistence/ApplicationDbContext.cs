@@ -17,5 +17,15 @@ namespace Repository
         {
 
         }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Hability> Habilities { get; set; }
+        public DbSet<Freelancer> Freelancers { get; set; }
+        public DbSet<Proyect> Proyects { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Proposal> Proposals { get; set; }
+
+
+
     }
 }
