@@ -9,7 +9,8 @@
       "Service/1.0.0": {
         "dependencies": {
           "Model": "1.0.0",
-          "Persistence": "1.0.0"
+          "Persistence": "1.0.0",
+          "Repository": "1.0.0"
         },
         "runtime": {
           "Service.dll": {}
@@ -844,6 +845,14 @@
         "runtime": {
           "Persistence.dll": {}
         }
+      },
+      "Repository/1.0.0": {
+        "dependencies": {
+          "Model": "1.0.0"
+        },
+        "runtime": {
+          "Repository.dll": {}
+        }
       }
     }
   },
@@ -1524,6 +1533,11 @@
       "sha512": ""
     },
     "Persistence/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Repository/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

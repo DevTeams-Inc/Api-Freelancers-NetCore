@@ -28,11 +28,11 @@ namespace Model
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
 
-        //id del usuario
         public string ApplicationUserId { get; set; }
         
         public ApplicationUser ApplicationUser { get; set; }
 
-        public IEnumerable<Hability> Habilities { get; set; }
+        public FreelancerHability FreelancerHability { get; set; }
+
     }
 }

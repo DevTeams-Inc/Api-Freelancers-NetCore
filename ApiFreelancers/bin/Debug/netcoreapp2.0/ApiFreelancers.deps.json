@@ -4237,7 +4237,8 @@
       "Service/1.0.0": {
         "dependencies": {
           "Model": "1.0.0",
-          "Persistence": "1.0.0"
+          "Persistence": "1.0.0",
+          "Repository": "1.0.0"
         },
         "runtime": {
           "Service.dll": {}

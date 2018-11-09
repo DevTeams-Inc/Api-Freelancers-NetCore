@@ -9,7 +9,6 @@ namespace Model
     public class Hability
     {
         public int Id { get; set; }
-        public int FreelancerId { get; set; }
         [Required]
         [StringLength(50)]
         public string Title { get; set; }
@@ -21,5 +20,7 @@ namespace Model
         [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
+        public FreelancerHability FreelancerHability { get; set; }
+
     }
 }

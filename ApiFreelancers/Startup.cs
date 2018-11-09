@@ -34,6 +34,8 @@ namespace ApiFreelancers
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IFreelancerService, FreelancerService>();
+            services.AddTransient<IHabilityService, HabilityService>();
             //configurando la bd
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("Dev")));

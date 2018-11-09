@@ -1477,6 +1477,19 @@
         "runtime": {
           "bin/placeholder/Persistence.dll": {}
         }
+      },
+      "Repository/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.0",
+        "dependencies": {
+          "Model": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Repository.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Repository.dll": {}
+        }
       }
     }
   },
@@ -4639,13 +4652,19 @@
       "type": "project",
       "path": "../Persistence/Persistence.csproj",
       "msbuildProject": "../Persistence/Persistence.csproj"
+    },
+    "Repository/1.0.0": {
+      "type": "project",
+      "path": "../Repository/Repository.csproj",
+      "msbuildProject": "../Repository/Repository.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
       "Microsoft.NETCore.App >= 2.0.0",
       "Model >= 1.0.0",
-      "Persistence >= 1.0.0"
+      "Persistence >= 1.0.0",
+      "Repository >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4683,6 +4702,9 @@
             },
             "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Persistence\\Persistence.csproj": {
               "projectPath": "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Persistence\\Persistence.csproj"
+            },
+            "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Repository\\Repository.csproj": {
+              "projectPath": "C:\\Users\\orbis\\Source\\repos\\ApiFreelancers\\Repository\\Repository.csproj"
             }
           }
         }

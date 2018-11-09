@@ -292,6 +292,27 @@ namespace Persistence.Migrations
                     b.ToTable("Freelancers");
                 });
 
+            modelBuilder.Entity("Model.FreelancerHability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FreelancerId");
+
+                    b.Property<int>("HabilityId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FreelancerId")
+                        .IsUnique();
+
+                    b.HasIndex("HabilityId")
+                        .IsUnique();
+
+                    b.ToTable("FreelancerHabilities");
+                });
+
             modelBuilder.Entity("Model.Hability", b =>
                 {
                     b.Property<int>("Id")
@@ -302,8 +323,6 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(200);
-
-                    b.Property<int>("FreelancerId");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -316,8 +335,6 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdateAt");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FreelancerId");
 
                     b.ToTable("Habilities");
                 });
@@ -462,11 +479,16 @@ namespace Persistence.Migrations
                         .HasForeignKey("ApplicationUserId");
                 });
 
-            modelBuilder.Entity("Model.Hability", b =>
+            modelBuilder.Entity("Model.FreelancerHability", b =>
                 {
                     b.HasOne("Model.Freelancer")
-                        .WithMany("Habilities")
-                        .HasForeignKey("FreelancerId")
+                        .WithOne("FreelancerHability")
+                        .HasForeignKey("Model.FreelancerHability", "FreelancerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Model.Hability")
+                        .WithOne("FreelancerHability")
+                        .HasForeignKey("Model.FreelancerHability", "HabilityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

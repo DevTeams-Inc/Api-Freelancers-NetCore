@@ -15,7 +15,6 @@ namespace Repository
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext>  options) : base(options)
         {
-
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Hability> Habilities { get; set; }
@@ -24,8 +23,6 @@ namespace Repository
         public DbSet<Category> Categories { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
-
-
-
+        public DbSet<FreelancerHability> FreelancerHabilities { get; set; }
     }
 }
