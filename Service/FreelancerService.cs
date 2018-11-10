@@ -49,31 +49,70 @@ namespace Service
             }
         }
 
-        public IndexVM<Freelancer> GetAll(int page = 1)
+        public IndexVm<FreelancerVm> GetAll(int page = 1)
         {
-            var result = new IndexVM<Freelancer>();
+            var result = new IndexVm<FreelancerVm>();
+            var freelancer = new List<FreelancerVm>();
             try
             {
-               var quantityOfPerson = 10;
-
-                var model = _dbContext.Freelancers.OrderBy(x => x.CreatedAt)
+                var quantityOfPerson = 10;
+                var model =
+                     _dbContext.Freelancers.OrderBy(x => x.Id)
                      .Include(x => x.ApplicationUser)
+                     .Include(x => x.Habilities)                
                      .Skip((page - 1) * quantityOfPerson)
                      .Take(quantityOfPerson).ToList();
 
-                var totalOfRegister = _dbContext.Freelancers.Count();
-
-                result.Entities = model;
+                /*
+                *en cada iteracion va a desglosar habilities para traer la 
+                * entidad hija que es hability y de esta forma incluirla en la respuesta
+                */
+                foreach (var i in model)
+                {
+                    var n = i.Habilities;
+                    /*
+                     * creamos una lista para agregarsela al modelo freelancerVm para solo enviar
+                     * la lista
+                     */
+                    var h = new List<Hability>();
+                    foreach (var j in n)
+                    {
+                         h.Add(_dbContext.Habilities.First(x => x.Id == j.HabilityId));
+                    }
+                    /*
+                     * creamos un nuevo modelo para personalizar la informacion enviada al usuarios
+                     * de esta manera evitamos enviar toda la informacion del usuario 
+                     * y solo enviamos la necesaria
+                     */
+                    var d = new FreelancerVm()
+                    {
+                        Id = i.Id,
+                        Lenguaje = i.Lenguaje,
+                        PriceHour = i.PriceHour,
+                        Biography = i.Biography,
+                        Interest = i.Interest,
+                        Level = i.Level,
+                        Historial = i.Historial,
+                        Rating = i.Rating,
+                        Testimony = i.Testimony,
+                        LastName = i.ApplicationUser.LastName,
+                        Name = i.ApplicationUser.Name,
+                        Avatar = i.ApplicationUser.Avatar,
+                        Address = i.ApplicationUser.Address,
+                        Habilities = h
+                    };
+                    freelancer.Add(d);
+                }
+                var totalOfRegister = model.Count();
+                result.Entities = freelancer;
                 result.ActualPage = page;
                 result.TotalOfRegister = totalOfRegister;
                 result.RegisterByPage = quantityOfPerson;
-               
             }
             catch (Exception)
             {
                 result = null;
             }
-
             return result;
         }
 
@@ -90,6 +129,34 @@ namespace Service
             {
                 result = null;
             }
+            return result;
+        }
+
+        public FreelancerVm Profile(int id)
+        {
+            var result = new FreelancerVm();
+            var fh = new List<FreelancerHability>();
+            try
+            {
+
+                var freelancer = _dbContext.Freelancers.Single(x => x.Id == id);
+
+                fh = _dbContext.FreelancerHabilities.Where(x => x.FreelancerId == id).ToList();
+
+                //result.Freelancer = freelancer;
+                
+                foreach(var i in fh)
+                {
+
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return result;
         }
 

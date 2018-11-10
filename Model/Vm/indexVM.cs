@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model.Vm
 {
-    public class IndexVM<T> : BaseModel where T : class   
+    public class IndexVm<T> : BaseModel where T : class   
     {
         public List<T> Entities { get; set; }
     }

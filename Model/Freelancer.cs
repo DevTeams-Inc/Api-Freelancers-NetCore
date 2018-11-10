@@ -29,10 +29,9 @@ namespace Model
         public DateTime UpdateAt { get; set; }
 
         public string ApplicationUserId { get; set; }
-        
+
         public ApplicationUser ApplicationUser { get; set; }
 
-        public FreelancerHability FreelancerHability { get; set; }
-
+        public IEnumerable<FreelancerHability> Habilities { get; set; }
     }
 }

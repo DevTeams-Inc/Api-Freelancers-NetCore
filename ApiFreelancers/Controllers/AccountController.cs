@@ -16,7 +16,7 @@ using Service.Interface;
 namespace ApiTokenJWT.Controllers
 {
     [Produces("application/json")]
-    [Route("accounts")]
+    [Route("api/account")]
     public class AccountController : Controller
     {
 
@@ -44,6 +44,7 @@ namespace ApiTokenJWT.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserVm model)
         {
+
             if (ModelState.IsValid)
             {
 

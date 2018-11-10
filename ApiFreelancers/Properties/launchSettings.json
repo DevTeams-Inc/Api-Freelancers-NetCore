@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:57455/freelancers",
+      "applicationUrl": "http://localhost:57455",
       "sslPort": 0
     }
   },
@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/freelancer",
       "environmentVariables": {
         "Secret_Key": "asnzcbnmsadmdlas156qwhdsauqooiqyerastdaopzlNAVDASDBjasbxbwqpoehyhasvdjsas120z25asdwqerqrafsac",
         "ASPNETCORE_ENVIRONMENT": "Development",

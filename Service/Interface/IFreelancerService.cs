@@ -9,6 +9,9 @@ namespace Service.Interface
 {
     public interface IFreelancerService : IRepository<Freelancer>
     {
-       IndexVM<Freelancer> GetAll(int page = 1);
+       IndexVm<FreelancerVm> GetAll(int page = 1);
+       FreelancerVm Profile(int id);
+
+
     }
 }

@@ -304,11 +304,9 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FreelancerId")
-                        .IsUnique();
+                    b.HasIndex("FreelancerId");
 
-                    b.HasIndex("HabilityId")
-                        .IsUnique();
+                    b.HasIndex("HabilityId");
 
                     b.ToTable("FreelancerHabilities");
                 });
@@ -482,13 +480,13 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Model.FreelancerHability", b =>
                 {
                     b.HasOne("Model.Freelancer")
-                        .WithOne("FreelancerHability")
-                        .HasForeignKey("Model.FreelancerHability", "FreelancerId")
+                        .WithMany("Habilities")
+                        .HasForeignKey("FreelancerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Model.Hability")
-                        .WithOne("FreelancerHability")
-                        .HasForeignKey("Model.FreelancerHability", "HabilityId")
+                    b.HasOne("Model.Hability", "Hability")
+                        .WithMany()
+                        .HasForeignKey("HabilityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

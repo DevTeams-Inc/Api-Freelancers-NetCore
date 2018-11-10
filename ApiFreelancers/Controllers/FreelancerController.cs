@@ -10,7 +10,7 @@ using Service.Interface;
 namespace ApiFreelancers.Controllers
 {
     [Produces("application/json")]
-    [Route("freelancers")]
+    [Route("api/freelancer")]
     public class FreelancerController : Controller
     {
         private readonly IFreelancerService _freelancer;

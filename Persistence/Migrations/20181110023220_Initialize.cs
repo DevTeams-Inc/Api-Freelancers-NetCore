@@ -178,6 +178,35 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Freelancers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Lenguaje = table.Column<string>(maxLength: 15, nullable: false),
+                    PriceHour = table.Column<decimal>(nullable: false),
+                    Biography = table.Column<string>(maxLength: 255, nullable: true),
+                    Interest = table.Column<string>(maxLength: 100, nullable: true),
+                    Level = table.Column<int>(nullable: false),
+                    Historial = table.Column<string>(maxLength: 255, nullable: true),
+                    Rating = table.Column<int>(nullable: false),
+                    Testimony = table.Column<string>(maxLength: 255, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdateAt = table.Column<DateTime>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Freelancers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Freelancers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Proyects",
                 columns: table => new
                 {
@@ -204,35 +233,25 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Freelancers",
+                name: "FreelancerHabilities",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Lenguaje = table.Column<string>(maxLength: 15, nullable: false),
-                    PriceHour = table.Column<decimal>(nullable: false),
-                    Biography = table.Column<string>(maxLength: 255, nullable: true),
-                    Interest = table.Column<string>(maxLength: 100, nullable: true),
-                    Level = table.Column<int>(nullable: false),
-                    Historial = table.Column<string>(maxLength: 255, nullable: true),
-                    Rating = table.Column<int>(nullable: false),
-                    Testimony = table.Column<string>(maxLength: 255, nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdateAt = table.Column<DateTime>(nullable: false),
-                    HabilityId = table.Column<int>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    FreelancerId = table.Column<int>(nullable: false),
+                    HabilityId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Freelancers", x => x.Id);
+                    table.PrimaryKey("PK_FreelancerHabilities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Freelancers_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_FreelancerHabilities_Freelancers_FreelancerId",
+                        column: x => x.FreelancerId,
+                        principalTable: "Freelancers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Freelancers_Habilities_HabilityId",
+                        name: "FK_FreelancerHabilities_Habilities_HabilityId",
                         column: x => x.HabilityId,
                         principalTable: "Habilities",
                         principalColumn: "Id",
@@ -365,14 +384,19 @@ namespace Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_FreelancerHabilities_FreelancerId",
+                table: "FreelancerHabilities",
+                column: "FreelancerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FreelancerHabilities_HabilityId",
+                table: "FreelancerHabilities",
+                column: "HabilityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Freelancers_ApplicationUserId",
                 table: "Freelancers",
                 column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Freelancers_HabilityId",
-                table: "Freelancers",
-                column: "HabilityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proposals_ApplicationUserId",
@@ -416,13 +440,16 @@ namespace Persistence.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Freelancers");
+                name: "FreelancerHabilities");
 
             migrationBuilder.DropTable(
                 name: "Proposals");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Freelancers");
 
             migrationBuilder.DropTable(
                 name: "Habilities");

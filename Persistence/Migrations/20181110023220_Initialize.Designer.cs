@@ -10,7 +10,7 @@ using Repository;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181109035843_Initialize")]
+    [Migration("20181110023220_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,8 +266,6 @@ namespace Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<int>("HabilityId");
-
                     b.Property<string>("Historial")
                         .HasMaxLength(255);
 
@@ -293,9 +291,26 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
+                    b.ToTable("Freelancers");
+                });
+
+            modelBuilder.Entity("Model.FreelancerHability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FreelancerId");
+
+                    b.Property<int>("HabilityId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FreelancerId");
+
                     b.HasIndex("HabilityId");
 
-                    b.ToTable("Freelancers");
+                    b.ToTable("FreelancerHabilities");
                 });
 
             modelBuilder.Entity("Model.Hability", b =>
@@ -462,9 +477,17 @@ namespace Persistence.Migrations
                     b.HasOne("Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
+                });
 
-                    b.HasOne("Model.Hability")
-                        .WithMany("Freelancers")
+            modelBuilder.Entity("Model.FreelancerHability", b =>
+                {
+                    b.HasOne("Model.Freelancer")
+                        .WithMany("Habilities")
+                        .HasForeignKey("FreelancerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Model.Hability", "Hability")
+                        .WithMany()
                         .HasForeignKey("HabilityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
