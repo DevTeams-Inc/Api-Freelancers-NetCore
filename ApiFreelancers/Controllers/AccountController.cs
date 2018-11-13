@@ -124,8 +124,14 @@ namespace ApiTokenJWT.Controllers
         [Route("email")]
         public IActionResult Email(string key)
         {
-            //creamos una vista que al momento de aceptar el id lo envie por aqui
-            return Ok(_authService.ValidateEmail(key));
+            if (_authService.GetById(key) != null)
+            {
+                return Ok(_authService.ValidateEmail(key));
+            }
+            else
+            {
+                return BadRequest("key invalid");
+            }
         }
 
 

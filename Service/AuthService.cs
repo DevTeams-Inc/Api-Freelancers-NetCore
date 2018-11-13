@@ -1,8 +1,13 @@
-﻿using Model;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Model;
 using Repository;
 using Service.Interface;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -31,6 +36,20 @@ namespace Service
             return model;
         }
 
+        public ApplicationUser GetById(string id)
+        {
+            var model = new ApplicationUser();
+            try
+            {
+                model = _dbContext.ApplicationUsers.First(x => x.Id == id);
+            }
+            catch (Exception)
+            {
+                model = null;
+            }
+            return model;
+        }
+
         public bool SendEmail(UserVm model)
         {
             try
@@ -44,7 +63,16 @@ namespace Service
                 mssg.SubjectEncoding = Encoding.UTF8;
                 mssg.Bcc.Add(model.Email);
 
-                mssg.Body = $"confirma tu correo<br> <a href='http://localhost:57455/accounts/email/?key={md.Id}'>Confirma Aqui</a>";
+
+                string body = string.Empty;
+                using (StreamReader reader = new StreamReader("wwwroot//index.html"))
+                {
+                    body = reader.ReadToEnd();
+                }
+
+                body = body.Replace("{id}", md.Id);
+
+                mssg.Body = body;
                 mssg.BodyEncoding = Encoding.UTF8;
                 mssg.IsBodyHtml = true;
                 mssg.From = new MailAddress("orbisalonzo25@gmail.com");
@@ -66,7 +94,7 @@ namespace Service
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }

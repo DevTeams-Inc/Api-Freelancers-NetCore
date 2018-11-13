@@ -14,3 +14,5 @@ C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Servi
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.csproj.CopyComplete
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.pdb
+C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\StackExchange.Redis.StrongName.dll
+C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\StackExchange.Redis.StrongName.xml

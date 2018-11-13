@@ -14,24 +14,63 @@ namespace Service
     public class FreelancerService : IFreelancerService
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IFreelancerHabilityService _habilityService;
         private readonly DateTime _dateTime;
-        public FreelancerService(ApplicationDbContext dbContext)
+        public FreelancerService(ApplicationDbContext dbContext
+            , IFreelancerHabilityService habilityService)
         {
             _dbContext = dbContext;
+            _habilityService = habilityService;
             _dateTime = DateTime.Now;
         }
-        public bool Add(Freelancer entity)
+        public bool AddFreelancerAndHability(FreelancerVm entity)
         {
             try
-            {  
-                _dbContext.Add(entity);
+            {
+                //preparamos el model del freelancer
+                var freelancer = new Freelancer {
+
+                    CreatedAt = _dateTime,
+                    ApplicationUserId = entity.ApplicationUserId,
+                    Biography = entity.Biography,
+                    Historial = entity.Historial,
+                    Interest = entity.Interest,
+                    Lenguaje = entity.Lenguaje,
+                    Level = entity.Level,
+                    PriceHour = entity.PriceHour,
+                    Rating = entity.Rating,
+                    Testimony = entity.Testimony            
+                };
+
+                //agregamos el freelancer
+                _dbContext.Add(freelancer);
                 _dbContext.SaveChanges();
+
+           
+                FreelancerHability model;
+                //buscamos el ultimo id del freelancer
+                //e iteramos en el listado de habilidades y los vamos agregando a la tabla
+                var id =  _dbContext.Freelancers.Max(x => x.Id);
+                foreach(var i in entity.Habilities)
+                {
+                    model = new FreelancerHability
+                    {
+                        FreelancerId = id,
+                        HabilityId = i.Id
+                    };
+                    _habilityService.Add(model);
+                }
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        public bool Add(Freelancer entity)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Delete(int id)

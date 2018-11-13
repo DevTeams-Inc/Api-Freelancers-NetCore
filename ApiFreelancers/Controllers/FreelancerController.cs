@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using Model.Vm;
 using Service.Interface;
 
 namespace ApiFreelancers.Controllers
@@ -26,15 +27,22 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Freelancer model)
+        public IActionResult Post([FromBody] FreelancerVm model)
         {
-            return Ok(_freelancer.Add(model));
+            return Ok(_freelancer.AddFreelancerAndHability(model));
         }
 
         [HttpPut]
         public IActionResult Put([FromBody] Freelancer model)
         {
-            return Ok(_freelancer.Update(model));
+            if (ModelState.IsValid)
+            {
+                return Ok(_freelancer.Update(model));
+            }
+            else
+            {
+                return BadRequest(model);
+            }
         }
 
         [HttpDelete("{id}")]

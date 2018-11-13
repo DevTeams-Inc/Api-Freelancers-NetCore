@@ -10,4 +10,10 @@
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="StackExchange.Redis.StrongName">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\stackexchange.redis.strongname\1.2.4\lib\netstandard1.5\StackExchange.Redis.StrongName.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

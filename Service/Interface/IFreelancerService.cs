@@ -11,6 +11,7 @@ namespace Service.Interface
     {
        IndexVm<FreelancerVm> GetAll(int page = 1);
        FreelancerVm Profile(int id);
+       bool AddFreelancerAndHability(FreelancerVm entity);
 
 
     }

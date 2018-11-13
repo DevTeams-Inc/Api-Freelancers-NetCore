@@ -19,6 +19,7 @@ namespace Model.Vm
         public string Name { get; set; }
         public string Avatar { get; set; }
         public string Address { get; set; }
+        public string ApplicationUserId { get; set; }
         public List<Hability> Habilities { get; set; }
 
     }

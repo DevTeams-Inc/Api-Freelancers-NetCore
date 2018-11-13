@@ -19,10 +19,11 @@ namespace ApiFreelancers.Controllers
             _hablility = hablility;
         }
 
-        [HttpGet]
-        public string Get()
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            return "hola";
+            return Ok(
+                _hablility.GetById(id));
         }
 
         [HttpPost]

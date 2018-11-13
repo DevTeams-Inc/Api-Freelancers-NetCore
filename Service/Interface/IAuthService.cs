@@ -11,5 +11,6 @@ namespace Service.Interface
         bool SendEmail(UserVm model);
         bool ValidateEmail(string id);
         bool ValidateUser(string email);
+        ApplicationUser GetById(string id);
     }
 }

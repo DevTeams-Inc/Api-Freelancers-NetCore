@@ -36,6 +36,8 @@ namespace ApiFreelancers
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IFreelancerService, FreelancerService>();
             services.AddTransient<IHabilityService, HabilityService>();
+            services.AddTransient<IFreelancerHabilityService, FreeelancerHabilityService>();
+
             //configurando la bd
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("Dev")));
@@ -111,6 +113,7 @@ namespace ApiFreelancers
             }
             app.UseAuthentication();
             app.UseCors("AllowSpecificOrigin");
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }
