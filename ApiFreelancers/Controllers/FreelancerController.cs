@@ -11,7 +11,7 @@ using Service.Interface;
 namespace ApiFreelancers.Controllers
 {
     [Produces("application/json")]
-    [Route("api/freelancer")]
+    [Route("api/freelancers")]
     public class FreelancerController : Controller
     {
         private readonly IFreelancerService _freelancer;
@@ -21,27 +21,54 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpGet]
+        [Route("")]
+        [Route("getall")]
+        [Route("getall/{page}")]
         public IActionResult Get(int page = 1)
         {
             return Ok(_freelancer.GetAll(page));
+        }
+        
+        [HttpGet]
+        [Route("getuser/{id}")]
+        public IActionResult GetUser(int id)
+        {
+            var model = _freelancer.GetById(id);
+            if (model != null)
+            {
+                return Ok(model);
+            }
+            else
+            {
+                return BadRequest("This user not exist");
+            }
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] FreelancerVm model)
         {
-            return Ok(_freelancer.AddFreelancerAndHability(model));
+
+            if (model.Lenguaje != null && model.Interest != null && model.PriceHour > 0)
+            {
+                return Ok(_freelancer.Add(model));
+            }
+            else
+            {
+                return BadRequest("Some fields are empty");
+            }
+
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Freelancer model)
+        public IActionResult Put([FromBody] FreelancerVm model)
         {
-            if (ModelState.IsValid)
+            if (model.Id > 0 && model.ApplicationUserId != null)
             {
                 return Ok(_freelancer.Update(model));
             }
             else
             {
-                return BadRequest(model);
+                return BadRequest("Some fields are empty");
             }
         }
 

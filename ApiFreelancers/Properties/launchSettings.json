@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/freelancer",
+      "launchUrl": "api/freelancers",
       "environmentVariables": {
         "Secret_Key": "asnzcbnmsadmdlas156qwhdsauqooiqyerastdaopzlNAVDASDBjasbxbwqpoehyhasvdjsas120z25asdwqerqrafsac",
         "ASPNETCORE_ENVIRONMENT": "Development",

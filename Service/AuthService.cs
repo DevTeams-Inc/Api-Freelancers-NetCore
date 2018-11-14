@@ -99,6 +99,7 @@ namespace Service
                 return false;
             }
         }
+
         //actualizamos el campo emailConfirmed y con esto confirmamos que esta registrado el usuario
         public bool ValidateEmail(string id)
         {

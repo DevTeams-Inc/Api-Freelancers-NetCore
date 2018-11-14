@@ -16,7 +16,7 @@ using Service.Interface;
 namespace ApiTokenJWT.Controllers
 {
     [Produces("application/json")]
-    [Route("api/account")]
+    [Route("api/accounts")]
     public class AccountController : Controller
     {
 

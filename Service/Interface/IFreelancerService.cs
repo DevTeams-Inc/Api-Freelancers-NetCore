@@ -7,12 +7,9 @@ using System.Text;
 
 namespace Service.Interface
 {
-    public interface IFreelancerService : IRepository<Freelancer>
+    public interface IFreelancerService : IRepository<FreelancerVm>
     {
        IndexVm<FreelancerVm> GetAll(int page = 1);
-       FreelancerVm Profile(int id);
-       bool AddFreelancerAndHability(FreelancerVm entity);
-
 
     }
 }

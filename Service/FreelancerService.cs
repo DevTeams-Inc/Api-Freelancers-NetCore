@@ -15,15 +15,16 @@ namespace Service
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IFreelancerHabilityService _habilityService;
+
         private readonly DateTime _dateTime;
         public FreelancerService(ApplicationDbContext dbContext
-            , IFreelancerHabilityService habilityService)
+            , IFreelancerHabilityService habilityService )
         {
             _dbContext = dbContext;
             _habilityService = habilityService;
             _dateTime = DateTime.Now;
         }
-        public bool AddFreelancerAndHability(FreelancerVm entity)
+        public bool Add(FreelancerVm entity)
         {
             try
             {
@@ -66,11 +67,6 @@ namespace Service
             {
                 return false;
             }
-        }
-
-        public bool Add(Freelancer entity)
-        {
-            throw new NotImplementedException();
         }
 
         public bool Delete(int id)
@@ -138,6 +134,7 @@ namespace Service
                         Name = i.ApplicationUser.Name,
                         Avatar = i.ApplicationUser.Avatar,
                         Address = i.ApplicationUser.Address,
+                        Email = i.ApplicationUser.Email,
                         Habilities = h
                     };
                     freelancer.Add(d);
@@ -155,64 +152,26 @@ namespace Service
             return result;
         }
 
-        public Freelancer GetById(int id)
-        {
-            var result = new Freelancer();
-            try
-            {
-                result = _dbContext.Freelancers
-                    .Include(x => x.ApplicationUser)
-                    .First(x => x.Id == id);
-            }
-            catch (Exception)
-            {
-                result = null;
-            }
-            return result;
-        }
-
-        public FreelancerVm Profile(int id)
-        {
-            var result = new FreelancerVm();
-            var fh = new List<FreelancerHability>();
-            try
-            {
-
-                var freelancer = _dbContext.Freelancers.Single(x => x.Id == id);
-
-                fh = _dbContext.FreelancerHabilities.Where(x => x.FreelancerId == id).ToList();
-
-                //result.Freelancer = freelancer;
-                
-                foreach(var i in fh)
-                {
-
-                }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-            return result;
-        }
-
-        public bool Update(Freelancer entity)
+        public bool Update(FreelancerVm entity)
         {
             try
             {
-                var model = _dbContext.Freelancers.
+                var freelancer = _dbContext.Freelancers.
                     First(x => x.Id == entity.Id);
-                model.Lenguaje = entity.Lenguaje;
-                model.Biography = entity.Biography;
-                model.PriceHour = entity.PriceHour;
-                model.Interest = entity.Interest;
-                model.Historial = entity.Historial;
-                model.Testimony = entity.Testimony;
-                model.UpdateAt = _dateTime;
-                _dbContext.Update(model);
+                var user = _dbContext.ApplicationUsers.First(x => x.Id == freelancer.ApplicationUserId);
+                //ApplicationUser
+                user.Name = entity.Name;
+                user.LastName = entity.LastName;
+                _dbContext.ApplicationUsers.Update(user);
+                //freelancer
+                freelancer.Lenguaje = entity.Lenguaje;
+                freelancer.Biography = entity.Biography;
+                freelancer.PriceHour = entity.PriceHour;
+                freelancer.Interest = entity.Interest;
+                freelancer.Historial = entity.Historial;
+                freelancer.Testimony = entity.Testimony;
+                freelancer.UpdateAt = _dateTime;
+                _dbContext.Update(freelancer);
                 _dbContext.SaveChanges();
                 return true;
             }
@@ -221,5 +180,36 @@ namespace Service
                 return false;
             }
         }
+
+        public FreelancerVm GetById(int id)
+        {
+            var result = new FreelancerVm();
+            try
+            {
+                var freelancer = _dbContext.Freelancers.Single(x => x.Id == id);
+                var user = _dbContext.ApplicationUsers.Single(x => x.Id == freelancer.ApplicationUserId);
+                result.Id = freelancer.Id;
+                result.Lenguaje = freelancer.Lenguaje;
+                result.PriceHour = freelancer.PriceHour;
+                result.Biography = freelancer.Biography;
+                result.Interest = freelancer.Interest;
+                result.Level = freelancer.Level;
+                result.Historial = freelancer.Historial;
+                result.Rating = freelancer.Rating;
+                result.Testimony = freelancer.Testimony;
+                result.Name = user.Name;
+                result.LastName = user.LastName;
+                result.Avatar = user.Avatar;
+                result.Address = user.Address;
+                result.Email = user.Email;
+                result.ApplicationUserId = user.Id;
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
     }
 }
