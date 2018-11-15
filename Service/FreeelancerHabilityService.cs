@@ -35,6 +35,11 @@ namespace Service
             throw new NotImplementedException();
         }
 
+        public IEnumerable<FreelancerHability> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public FreelancerHability GetById(int id)
         {
             throw new NotImplementedException();

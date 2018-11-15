@@ -17,10 +17,12 @@ namespace Service
             _dbContext = dbContext;
             _dateTime = DateTime.Now;
         }
+
         public bool Add(Hability entity)
         {
             try
             {
+                entity.CreatedAt = _dateTime;
                 _dbContext.Add(entity);
                 _dbContext.SaveChanges();
                 return true;
@@ -45,6 +47,20 @@ namespace Service
             {
                 return false;
             }
+        }
+
+        public IEnumerable<Hability> GetAll()
+        {
+            var model = new List<Hability>();
+            try
+            {
+                model = _dbContext.Habilities.ToList();
+            }
+            catch (Exception)
+            {
+                model = null;
+            }
+            return model;
         }
 
         public Hability GetById(int id)

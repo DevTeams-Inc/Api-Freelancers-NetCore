@@ -28,8 +28,8 @@ namespace ApiFreelancers.Controllers
         {
             return Ok(_freelancer.GetAll(page));
         }
-        
-        [HttpGet]
+
+        [HttpGet("{id}", Name = "freelancerCreated")]
         [Route("getuser/{id}")]
         public IActionResult GetUser(int id)
         {
@@ -50,7 +50,8 @@ namespace ApiFreelancers.Controllers
 
             if (model.Lenguaje != null && model.Interest != null && model.PriceHour > 0)
             {
-                return Ok(_freelancer.Add(model));
+                _freelancer.Add(model);
+                return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id} , model);
             }
             else
             {

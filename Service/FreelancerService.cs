@@ -211,5 +211,9 @@ namespace Service
             return result;
         }
 
+        public IEnumerable<FreelancerVm> GetAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

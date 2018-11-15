@@ -10,5 +10,6 @@ namespace Repository
         bool Update(TEntity entity);
         bool Delete(int id);
         TEntity GetById(int id);
+        IEnumerable<TEntity> GetAll();
     }
 }
