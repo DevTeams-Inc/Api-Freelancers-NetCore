@@ -239,14 +239,13 @@ namespace Persistence.Migrations
                     b.Property<string>("Img")
                         .HasMaxLength(255);
 
-                    b.Property<int>("ProyectId");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("UpdateAt");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProyectId")
-                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -354,7 +353,7 @@ namespace Persistence.Migrations
 
                     b.Property<decimal>("Offer");
 
-                    b.Property<int?>("ProyectId");
+                    b.Property<int>("ProyectId");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -366,9 +365,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("ProyectId")
-                        .IsUnique()
-                        .HasFilter("[ProyectId] IS NOT NULL");
+                    b.HasIndex("ProyectId");
 
                     b.ToTable("Proposals");
                 });
@@ -381,6 +378,8 @@ namespace Persistence.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired();
+
+                    b.Property<int>("CategoryId");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -405,6 +404,9 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("Proyects");
                 });
@@ -462,14 +464,6 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Model.Category", b =>
-                {
-                    b.HasOne("Model.Proyect")
-                        .WithOne("Category")
-                        .HasForeignKey("Model.Category", "ProyectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Model.Freelancer", b =>
                 {
                     b.HasOne("Model.ApplicationUser", "ApplicationUser")
@@ -497,9 +491,10 @@ namespace Persistence.Migrations
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Model.Proyect")
-                        .WithOne("Proposal")
-                        .HasForeignKey("Model.Proposal", "ProyectId");
+                    b.HasOne("Model.Proyect", "Proyect")
+                        .WithMany("Proposal")
+                        .HasForeignKey("ProyectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Model.Proyect", b =>
@@ -507,6 +502,11 @@ namespace Persistence.Migrations
                     b.HasOne("Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Model.Category", "Category")
+                        .WithOne("Proyect")
+                        .HasForeignKey("Model.Proyect", "CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -90,7 +90,7 @@ namespace Service
             var freelancer = new List<FreelancerVm>();
             try
             {
-                var quantityOfPerson = 10;
+                var quantityOfPerson = 6;
                 var model =
                      _dbContext.Freelancers.OrderBy(x => x.Id)
                      .Include(x => x.ApplicationUser)

@@ -22,10 +22,8 @@ namespace Model
         [StringLength(255)]
         public string Address { get; set; }
         [Required]
-        public DateTime CreatedAt { get; set; }
-        
+        public DateTime CreatedAt { get; set; } 
         public DateTime UpdateAt { get; set; }
         
-       
     }
 }

@@ -10,7 +10,8 @@ namespace Model
     {
         public int Id { get; set; }
         [Required]
-        public int ProyectId { get; set; }
+        [StringLength(50)]
+        public string Name { get; set; }
         [Required]
         [StringLength(100)]
         public string Area { get; set; }
@@ -21,7 +22,7 @@ namespace Model
         public string Img { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
-
         public DateTime UpdateAt { get; set; }
+        public Proyect Proyect { get; set; }
     }
 }

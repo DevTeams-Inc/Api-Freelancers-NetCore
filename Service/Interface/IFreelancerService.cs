@@ -7,9 +7,8 @@ using System.Text;
 
 namespace Service.Interface
 {
-    public interface IFreelancerService : IRepository<FreelancerVm>
+    public interface IFreelancerService : IRepository<FreelancerVm> , IRepositoryPagination<FreelancerVm>
     {
-       IndexVm<FreelancerVm> GetAll(int page = 1);
 
     }
 }

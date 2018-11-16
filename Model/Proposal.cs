@@ -9,7 +9,7 @@ namespace Model
     public class Proposal
     {
         public int Id { get; set; }
-        public int? ProyectId { get; set; }
+        public int ProyectId { get; set; }
         [Required]
         public string ApplicationUserId { get; set; }
         [Required]
@@ -24,6 +24,8 @@ namespace Model
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
 
+        [ForeignKey("ProyectId")]
+        public Proyect Proyect { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public IEnumerable<Answer> Answers { get; set; }
     }
