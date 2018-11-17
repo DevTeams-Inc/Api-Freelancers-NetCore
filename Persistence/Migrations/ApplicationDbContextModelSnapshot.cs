@@ -405,8 +405,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("CategoryId")
-                        .IsUnique();
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Proyects");
                 });
@@ -505,8 +504,8 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Model.Category", "Category")
-                        .WithOne("Proyect")
-                        .HasForeignKey("Model.Proyect", "CategoryId")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

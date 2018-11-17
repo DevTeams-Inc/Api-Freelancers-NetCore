@@ -5,12 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181110035927_Initialize2.cs" />
-    <Compile Remove="Migrations\20181115162813_Proyects.cs" />
-    <Compile Remove="Migrations\20181115163410_Proyects.cs" />
-    <Compile Remove="Migrations\20181115164504_Proyects.cs" />
-    <Compile Remove="Migrations\20181115165119_Proyects.cs" />
-    <Compile Remove="Migrations\20181115165858_Proyects.cs" />
+    <Compile Remove="Migrations\20181116054105_Initialize.cs" />
   </ItemGroup>
 
   <ItemGroup>

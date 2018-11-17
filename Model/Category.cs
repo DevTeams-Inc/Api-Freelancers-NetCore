@@ -23,6 +23,5 @@ namespace Model
         [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
-        public Proyect Proyect { get; set; }
     }
 }

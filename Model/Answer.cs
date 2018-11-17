@@ -13,5 +13,8 @@ namespace Model
         [Required]
         [StringLength(255)]
         public string Message { get; set; }
+
+        //faltan answers
+
     }
 }

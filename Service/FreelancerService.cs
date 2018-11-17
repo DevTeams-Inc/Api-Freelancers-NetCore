@@ -14,13 +14,16 @@ namespace Service
     public class FreelancerService : IFreelancerService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IFreelancerHabilityService _habilityService;
+        private readonly IFreelancerHabilityService _freelancerHabilityService;
+        private readonly IHabilityService _habilityService;
 
         private readonly DateTime _dateTime;
         public FreelancerService(ApplicationDbContext dbContext
-            , IFreelancerHabilityService habilityService )
+            , IFreelancerHabilityService freelancerHabilityService , 
+            IHabilityService habilityService)
         {
             _dbContext = dbContext;
+            _freelancerHabilityService = freelancerHabilityService;
             _habilityService = habilityService;
             _dateTime = DateTime.Now;
         }
@@ -59,7 +62,7 @@ namespace Service
                         FreelancerId = id,
                         HabilityId = i.Id
                     };
-                    _habilityService.Add(model);
+                    _freelancerHabilityService.Add(model);
                 }
                 return true;
             }
@@ -112,7 +115,7 @@ namespace Service
                     var h = new List<Hability>();
                     foreach (var j in n)
                     {
-                         h.Add(_dbContext.Habilities.First(x => x.Id == j.HabilityId));
+                         h.Add(_habilityService.GetById(j.HabilityId));
                     }
                     /*
                      * creamos un nuevo modelo para personalizar la informacion enviada al usuarios
@@ -135,7 +138,9 @@ namespace Service
                         Avatar = i.ApplicationUser.Avatar,
                         Address = i.ApplicationUser.Address,
                         Email = i.ApplicationUser.Email,
-                        Habilities = h
+                        Habilities = h,
+                        ApplicationUserId = i.ApplicationUser.Id
+                        
                     };
                     freelancer.Add(d);
                 }

@@ -41,7 +41,7 @@ namespace Service
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -63,7 +63,6 @@ namespace Service
             }
         }
        
-        //falta la realacion nueva de las categorias
         public IndexVm<ProyectVm> GetAll(int page = 1)
         {
             var result = new IndexVm<ProyectVm>();
@@ -74,11 +73,31 @@ namespace Service
                 var model = _dbContext.Proyects.OrderBy(x => x.CreatedAt)
                            .Include(x => x.ApplicationUser)
                            .Include(x => x.Category)
+                           .Include(x => x.Proposal)
                            .Skip((page - 1) * quantityOfProyects)
                            .Take(quantityOfProyects).ToList();
 
                 foreach (var i in model)
                 {
+                    var proposals = new List<ProposalVm>();
+                    foreach (var j in i.Proposal)
+                    {
+                        var vmProposal = new ProposalVm
+                        {
+                            Id = j.Id,
+                            Address = j.ApplicationUser.Address,
+                            ApplicationUserId = j.ApplicationUserId,
+                            CreatedAt = j.CreatedAt,
+                            Description = j.Description,
+                            Offer = j.Offer,
+                            ProyectId = j.ProyectId,
+                            Title = j.Title,
+                            UserName = j.ApplicationUser.Name + " " + j.ApplicationUser.LastName
+
+                        };
+                        proposals.Add(vmProposal);
+                    }
+
                     var vm = new ProyectVm
                     {
                         Id = i.Id,
@@ -87,12 +106,14 @@ namespace Service
                         ApplicationUserId = i.ApplicationUserId,
                         Avatar = i.ApplicationUser.Avatar,
                         CategoryId = i.CategoryId,
-                        CategoryName = i.Category.Name,
+                        NameCategory = i.Category.Name,
                         CreatedAt = i.CreatedAt,
                         Description = i.Description,
                         Price = i.Price,
+                        //recuerda que mandaras una string
                         Required_Skill = i.Required_Skill,
                         Scope = i.Scope,
+                        Proposal = proposals,
                         UserName = i.ApplicationUser.Name + " " + i.ApplicationUser.LastName
                     };
                     proyects.Add(vm);
@@ -104,7 +125,7 @@ namespace Service
                 result.RegisterByPage = quantityOfProyects;
                 result.TotalOfRegister = totalOfRegister;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result = null;
             }
@@ -128,7 +149,7 @@ namespace Service
                     ApplicationUserId = model.ApplicationUserId,
                     Avatar = model.ApplicationUser.Avatar,
                     CategoryId = model.CategoryId,
-                    CategoryName = model.Category.Name,
+                    NameCategory = model.Category.Name,
                     CreatedAt = model.CreatedAt,
                     Description = model.Description,
                     Price = model.Price,

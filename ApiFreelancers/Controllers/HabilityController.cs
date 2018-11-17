@@ -45,6 +45,7 @@ namespace ApiFreelancers.Controllers
         {
             if (ModelState.IsValid)
             {
+                _hablility.Add(model);
                 return new CreatedAtRouteResult("createdHability" , new { id = model.Id } , model);
                 
             }

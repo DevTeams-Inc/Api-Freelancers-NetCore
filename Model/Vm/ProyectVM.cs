@@ -24,10 +24,9 @@ namespace Model.Vm
         public string Avatar { get; set; }
         public string Adress { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string CategoryName { get; set; }
+        public string NameCategory { get; set; }
         [Required]
-        public int CategoryId { get; set; }
-
-       // public IEnumerable<Proposal> Proposal { get; set; }
+        public int CategoryId { get; set; } 
+        public IEnumerable<ProposalVm> Proposal { get; set; }
     }
 }
