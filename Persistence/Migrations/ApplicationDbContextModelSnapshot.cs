@@ -135,6 +135,10 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<DateTime>("CreatedAt");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -142,6 +146,8 @@ namespace Persistence.Migrations
                     b.Property<int>("ProposalId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ProposalId");
 
@@ -154,10 +160,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255);
 
                     b.Property<string>("Avatar")
                         .HasMaxLength(150);
@@ -269,11 +271,15 @@ namespace Persistence.Migrations
                     b.Property<string>("Interest")
                         .HasMaxLength(100);
 
+                    b.Property<decimal>("Lat");
+
                     b.Property<string>("Lenguaje")
                         .IsRequired()
                         .HasMaxLength(15);
 
                     b.Property<int>("Level");
+
+                    b.Property<decimal>("Long");
 
                     b.Property<decimal>("PriceHour");
 
@@ -457,6 +463,10 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Model.Answer", b =>
                 {
+                    b.HasOne("Model.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Model.Proposal")
                         .WithMany("Answers")
                         .HasForeignKey("ProposalId")

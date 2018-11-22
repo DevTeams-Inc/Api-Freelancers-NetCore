@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -15,9 +16,12 @@ namespace ApiFreelancers.Controllers
     public class FreelancerController : Controller
     {
         private readonly IFreelancerService _freelancer;
-        public FreelancerController(IFreelancerService freelancer)
+        private readonly IImageWriter _imageHandler;
+        public FreelancerController(IFreelancerService freelancer ,
+            IImageWriter imageHandler)
         {
             _freelancer = freelancer;
+            _imageHandler = imageHandler;
         }
 
         [HttpGet]
@@ -31,9 +35,9 @@ namespace ApiFreelancers.Controllers
 
         [HttpGet("{id}", Name = "freelancerCreated")]
         [Route("getuser/{id}")]
-        public IActionResult GetUser(int id)
+        public IActionResult GetUser(string id)
         {
-            var model = _freelancer.GetById(id);
+            var model = _freelancer.GetByIdUser(id);
             if (model != null)
             {
                 return Ok(model);
@@ -45,19 +49,30 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] FreelancerVm model)
+        public async Task<IActionResult> Post([FromForm] FreelancerVm model, [FromForm]IFormFile file)
         {
 
-            if (model.Lenguaje != null && model.Interest != null && model.PriceHour > 0)
+            if (model.ApplicationUserId != null && model.PriceHour > 0 && model.Lenguaje != null
+                && model.Interest != null)
             {
-                _freelancer.Add(model);
-                return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id} , model);
+                var avatar = await _imageHandler.UploadImage(file);
+                if (avatar != null)
+                {
+                    model.Avatar = avatar.ToString();
+                    _freelancer.Add(model);
+                    return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id }, model);
+                }
+                else
+                {
+                    model.Avatar = "default.png";
+                    _freelancer.Add(model);
+                    return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id }, model);
+                }
             }
             else
             {
                 return BadRequest("Some fields are empty");
             }
-
         }
 
         [HttpPut]

@@ -23,14 +23,22 @@ namespace Model.Vm
         public int Rating { get; set; }
         public string Testimony { get; set; }
 
+        [Required]
+        public decimal Long { get; set; }
+        [Required]
+        public decimal Lat { get; set; }
+
         //account
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Avatar { get; set; }
-        public string Address { get; set; }
+        [Required]
         public string Email { get; set; }
-
+        [Required]
         public string ApplicationUserId { get; set; }
+
         public List<Hability> Habilities { get; set; }
 
 

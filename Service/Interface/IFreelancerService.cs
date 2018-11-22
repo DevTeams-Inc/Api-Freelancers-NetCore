@@ -9,6 +9,6 @@ namespace Service.Interface
 {
     public interface IFreelancerService : IRepository<FreelancerVm> , IRepositoryPagination<FreelancerVm>
     {
-
+        FreelancerVm GetByIdUser(string id);
     }
 }

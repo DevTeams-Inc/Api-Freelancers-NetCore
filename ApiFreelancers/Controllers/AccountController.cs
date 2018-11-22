@@ -54,8 +54,8 @@ namespace ApiTokenJWT.Controllers
                     LastName = model.LastName,
                     Name = model.Name,
                     Role = 1,
-                    Address = "No especificada",
-                    CreatedAt = _dateTime
+                    CreatedAt = _dateTime,
+                    Avatar = "default.png" 
                 };
 
 
@@ -95,6 +95,7 @@ namespace ApiTokenJWT.Controllers
                     var model = _authService.GetByEmail(userInfo.Email);
                     userInfo.Name = model.Name;
                     userInfo.LastName = model.LastName;
+                    userInfo.Id = model.Id;
 
                     if (_authService.ValidateUser(model.Email))
                     {

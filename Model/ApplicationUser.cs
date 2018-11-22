@@ -19,9 +19,6 @@ namespace Model
         [Required]
         public int Role { get; set; }
         [Required]
-        [StringLength(255)]
-        public string Address { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; } 
         public DateTime UpdateAt { get; set; }
         

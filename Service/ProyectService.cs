@@ -41,7 +41,7 @@ namespace Service
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -85,7 +85,6 @@ namespace Service
                         var vmProposal = new ProposalVm
                         {
                             Id = j.Id,
-                            Address = j.ApplicationUser.Address,
                             ApplicationUserId = j.ApplicationUserId,
                             CreatedAt = j.CreatedAt,
                             Description = j.Description,
@@ -102,7 +101,6 @@ namespace Service
                     {
                         Id = i.Id,
                         Title = i.Title,
-                        Adress = i.ApplicationUser.Address,
                         ApplicationUserId = i.ApplicationUserId,
                         Avatar = i.ApplicationUser.Avatar,
                         CategoryId = i.CategoryId,
@@ -125,7 +123,7 @@ namespace Service
                 result.RegisterByPage = quantityOfProyects;
                 result.TotalOfRegister = totalOfRegister;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result = null;
             }
@@ -145,7 +143,6 @@ namespace Service
                 {
                     Id = model.Id,
                     Title = model.Title,
-                    Adress = model.ApplicationUser.Address,
                     ApplicationUserId = model.ApplicationUserId,
                     Avatar = model.ApplicationUser.Avatar,
                     CategoryId = model.CategoryId,

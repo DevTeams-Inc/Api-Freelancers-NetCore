@@ -25,10 +25,10 @@ namespace ApiFreelancers.Controllers
             return Ok(_proposalService.GetAllVm());
         }
 
-        [HttpGet("{id}" , Name = "GetByIdProposal")]
+        [HttpGet("{id}", Name = "GetByIdProposal")]
         public IActionResult Get(int id)
         {
-            return Ok(_proposalService.GetById(id));
+            return Ok(_proposalService.GetbyIdVm(id));
         }
 
         [HttpPost]
@@ -37,11 +37,43 @@ namespace ApiFreelancers.Controllers
             if (ModelState.IsValid)
             {
                 _proposalService.Add(model);
-                return new CreatedAtRouteResult("GetByIdProposal", new { id = model.Id } , model);
+                return new CreatedAtRouteResult("GetByIdProposal", new { id = model.Id }, model);
             }
             else
             {
                 return BadRequest("Some fields are empty");
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Put([FromBody] Proposal model)
+        {
+            if (model.Id != 0 && model.ProyectId != 0 && model.ApplicationUserId != null)
+            {
+                var m = _proposalService.Update(model);
+                if (m)
+                {
+                   return Ok(m);
+                }
+                else
+                {
+                    return BadRequest("Error to update this proposal");
+                }
+            }
+               return BadRequest("This proposal not exist");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var model = _proposalService.Delete(id);
+            if (model)
+            {
+                return Ok(model);
+            }
+            else
+            {
+                return BadRequest("This proposal not exist");
             }
         }
 

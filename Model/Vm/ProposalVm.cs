@@ -15,5 +15,6 @@ namespace Model.Vm
         public DateTime CreatedAt { get; set; }
         public string UserName { get; set; }
         public string Address { get; set; }
+        public IEnumerable<Answer> Answers { get; set; }
     }
 }

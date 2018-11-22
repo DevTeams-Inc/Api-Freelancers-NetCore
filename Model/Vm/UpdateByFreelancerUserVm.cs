@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Model.Vm
+{
+    public class UpdateByFreelancerUserVm
+    {
+        public string Id { get; set; }
+        public string Address { get; set; }
+        public string Avatar { get; set; }
+    }
+}

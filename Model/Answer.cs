@@ -13,8 +13,9 @@ namespace Model
         [Required]
         [StringLength(255)]
         public string Message { get; set; }
-
-        //faltan answers
-
+        [Required]
+        public DateTime CreatedAt { get; set;}
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

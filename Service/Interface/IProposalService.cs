@@ -10,5 +10,6 @@ namespace Service.Interface
     public interface IProposalService : IRepository<Proposal>
     {
         IEnumerable<ProposalVm> GetAllVm();
+        ProposalVm GetbyIdVm(int id);
     }
 }

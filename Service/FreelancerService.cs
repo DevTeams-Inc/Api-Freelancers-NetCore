@@ -16,21 +16,31 @@ namespace Service
         private readonly ApplicationDbContext _dbContext;
         private readonly IFreelancerHabilityService _freelancerHabilityService;
         private readonly IHabilityService _habilityService;
+        private readonly IAccountService _accountService;
 
         private readonly DateTime _dateTime;
-        public FreelancerService(ApplicationDbContext dbContext
-            , IFreelancerHabilityService freelancerHabilityService , 
-            IHabilityService habilityService)
+        public FreelancerService(ApplicationDbContext dbContext,
+            IFreelancerHabilityService freelancerHabilityService, 
+            IHabilityService habilityService, 
+            IAccountService accountService)
         {
             _dbContext = dbContext;
             _freelancerHabilityService = freelancerHabilityService;
             _habilityService = habilityService;
+            _accountService = accountService;
             _dateTime = DateTime.Now;
         }
         public bool Add(FreelancerVm entity)
         {
             try
             {
+                UpdateByFreelancerUserVm user = new UpdateByFreelancerUserVm
+                {
+                    Id = entity.ApplicationUserId,
+                    Avatar = entity.Avatar
+                };
+                _accountService.UpdateByFreelancer(user);
+
                 //preparamos el model del freelancer
                 var freelancer = new Freelancer {
 
@@ -43,6 +53,8 @@ namespace Service
                     Level = entity.Level,
                     PriceHour = entity.PriceHour,
                     Rating = entity.Rating,
+                    Lat = entity.Lat,
+                    Long = entity.Long,
                     Testimony = entity.Testimony            
                 };
 
@@ -135,10 +147,11 @@ namespace Service
                         Testimony = i.Testimony,
                         LastName = i.ApplicationUser.LastName,
                         Name = i.ApplicationUser.Name,
-                        Avatar = i.ApplicationUser.Avatar,
-                        Address = i.ApplicationUser.Address,
+                        Avatar = $"http://localhost:57455/img/{i.ApplicationUser.Avatar}",
                         Email = i.ApplicationUser.Email,
                         Habilities = h,
+                        Lat = i.Lat,
+                        Long = i.Long,
                         ApplicationUserId = i.ApplicationUser.Id
                         
                     };
@@ -191,7 +204,9 @@ namespace Service
             var result = new FreelancerVm();
             try
             {
-                var freelancer = _dbContext.Freelancers.Single(x => x.Id == id);
+                var freelancer = _dbContext.Freelancers
+                    .Include(x => x.Habilities)
+                    .Single(x => x.Id == id);
                 var user = _dbContext.ApplicationUsers.Single(x => x.Id == freelancer.ApplicationUserId);
                 result.Id = freelancer.Id;
                 result.Lenguaje = freelancer.Lenguaje;
@@ -204,10 +219,17 @@ namespace Service
                 result.Testimony = freelancer.Testimony;
                 result.Name = user.Name;
                 result.LastName = user.LastName;
-                result.Avatar = user.Avatar;
-                result.Address = user.Address;
+                result.Avatar = $"http://localhost:57455/img/{user.Avatar}";
+                result.Lat = freelancer.Lat;
+                result.Long = freelancer.Long;
                 result.Email = user.Email;
                 result.ApplicationUserId = user.Id;
+                var h = new List<Hability>();
+                foreach (var i in freelancer.Habilities )
+                {
+                    h.Add(_habilityService.GetById(i.HabilityId));
+                }
+                result.Habilities = h;
             }
             catch (Exception)
             {
@@ -219,6 +241,47 @@ namespace Service
         public IEnumerable<FreelancerVm> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public FreelancerVm GetByIdUser(string id)
+        {
+            var result = new FreelancerVm();
+            try
+            {
+                var freelancer = _dbContext.Freelancers
+                    .Include(x => x.Habilities)
+                    .First(x => x.ApplicationUserId == id);
+
+                var user = _dbContext.ApplicationUsers.Single(x => x.Id == id);
+
+                result.Id = freelancer.Id;
+                result.Lenguaje = freelancer.Lenguaje;
+                result.PriceHour = freelancer.PriceHour;
+                result.Biography = freelancer.Biography;
+                result.Interest = freelancer.Interest;
+                result.Level = freelancer.Level;
+                result.Historial = freelancer.Historial;
+                result.Rating = freelancer.Rating;
+                result.Testimony = freelancer.Testimony;
+                result.Name = user.Name;
+                result.LastName = user.LastName;
+                result.Avatar = $"http://localhost:57455/img/{user.Avatar}";
+                result.Lat = freelancer.Lat;
+                result.Long = freelancer.Long;
+                result.Email = user.Email;
+                result.ApplicationUserId = user.Id;
+                var h = new List<Hability>();
+                foreach (var i in freelancer.Habilities)
+                {
+                    h.Add(_habilityService.GetById(i.HabilityId));
+                }
+                result.Habilities = h;
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
         }
     }
 }

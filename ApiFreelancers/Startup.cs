@@ -40,6 +40,13 @@ namespace ApiFreelancers
             services.AddTransient<ICategoryService , CategoryService>();
             services.AddTransient<IProyectService, ProyectService>();
             services.AddTransient<IProposalService , ProposalService>();
+            services.AddTransient<IAnswersService , AnswersService>();
+            services.AddTransient<IAccountService, AccountService>();
+            //reaparar
+            services.AddTransient<IImageWriter, ImageService>();
+
+
+
 
             //configurando la bd
             services.AddDbContext<ApplicationDbContext>(options =>

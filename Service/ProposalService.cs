@@ -65,7 +65,6 @@ namespace Service
                     var vm = new ProposalVm
                     {
                         Id = i.Id,
-                        Address = i.ApplicationUser.Address,
                         ApplicationUserId = i.ApplicationUserId,
                         CreatedAt = i.CreatedAt,
                         Description = i.Description,
@@ -89,17 +88,84 @@ namespace Service
 
         public Proposal GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = new Proposal();
+            try
+            {
+                result = _dbContext.Proposals
+                    .Include(x => x.ApplicationUser)
+                    .Include(x => x.Answers)
+                    .First(x => x.Id == id);
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
         }
 
         public bool Update(Proposal entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var model = _dbContext.Proposals.First(x => x.Id == entity.Id);
+                model.Offer = entity.Offer;
+                model.Title = entity.Title;
+                model.Description = entity.Description;
+                model.UpdateAt = _dateTime;
+                _dbContext.Proposals.Update(model);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var model = _dbContext.Proposals.First(x => x.Id == id);
+                _dbContext.Proposals.Remove(model);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public ProposalVm GetbyIdVm(int id)
+        {
+            ProposalVm result;
+            try
+            {
+                var model = _dbContext.Proposals
+                    .Include(x => x.ApplicationUser)
+                    .Include(x => x.Answers)
+                    .First(x => x.Id == id);
+
+                result = new ProposalVm
+                {
+                        Id = model.Id,
+                        ApplicationUserId = model.ApplicationUserId,
+                        CreatedAt = model.CreatedAt,
+                        Description = model.Description,
+                        Offer = model.Offer,
+                        ProyectId = model.ProyectId,
+                        Title = model.Title,
+                        UserName = model.ApplicationUser.Name + " " + model.ApplicationUser.LastName,
+                        Answers = model.Answers
+
+                };
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
         }
     }
 }

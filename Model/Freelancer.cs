@@ -25,6 +25,10 @@ namespace Model
         [StringLength(255)]
         public string Testimony { get; set; }
         [Required]
+        public decimal Long { get; set; }
+        [Required]
+        public decimal Lat { get; set; }
+        [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
 
