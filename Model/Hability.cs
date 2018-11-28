@@ -14,10 +14,6 @@ namespace Model
         public string Title { get; set; }
         [StringLength(200)]
         public string Description { get; set; }
-        [StringLength(150)]
-        [Required]
-        public string Image { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
     }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -11,6 +13,7 @@ namespace ApiFreelancers.Controllers
 {
     [Produces("application/json")]
     [Route("api/categories")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _category;
@@ -27,7 +30,7 @@ namespace ApiFreelancers.Controllers
             return Ok(_category.GetAll());
         }
 
-        [HttpGet("{id}" , Name = "GetbyIdCategory" )]
+        [HttpGet("{id}", Name = "GetbyIdCategory")]
         public IActionResult Get(int id)
         {
             var model = _category.GetById(id);
@@ -42,7 +45,7 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Category model){
+        public IActionResult Post([FromBody] Category model) {
 
             if (ModelState.IsValid)
             {
@@ -57,7 +60,7 @@ namespace ApiFreelancers.Controllers
         [HttpPut]
         public IActionResult Put([FromBody] Category model)
         {
-            if (model.Id !=0)
+            if (model.Id != 0)
             {
                 return Ok(_category.Update(model));
             }
@@ -71,6 +74,15 @@ namespace ApiFreelancers.Controllers
         public IActionResult Delete(int id)
         {
             return Ok(_category.Delete(id));
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("home")]
+        public IActionResult Home()
+        {
+            var model =  _category.GetTree();
+            return Ok(model);
         }
     }
 }

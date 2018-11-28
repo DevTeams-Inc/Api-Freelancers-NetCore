@@ -21,7 +21,7 @@ namespace Model.Vm
         
         public string Historial { get; set; }
         public int Rating { get; set; }
-        public string Testimony { get; set; }
+        public string Profesion { get; set; }
 
         [Required]
         public decimal Long { get; set; }
@@ -36,7 +36,6 @@ namespace Model.Vm
         public string Avatar { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required]
         public string ApplicationUserId { get; set; }
 
         public List<Hability> Habilities { get; set; }

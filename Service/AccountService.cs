@@ -17,6 +17,30 @@ namespace Service
             _dbContext = dbContext;
         }
 
+        public IEnumerable<UserVm> GetAll()
+        {
+            var result = new List<UserVm>();
+            try
+            {
+                var model = _dbContext.ApplicationUsers.ToList();
+                foreach(var i in model)
+                {
+                    UserVm user = new UserVm
+                    {
+                        Name = i.Name,
+                        LastName = i.LastName,
+                        Email = i.Email
+                    };
+                    result.Add(user);
+                }
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
         public bool UpdateByFreelancer(UpdateByFreelancerUserVm entity)
         {
             try

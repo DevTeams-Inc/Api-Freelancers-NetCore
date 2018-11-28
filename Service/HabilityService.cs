@@ -83,7 +83,6 @@ namespace Service
             try
             {
                 var model = _dbContext.Habilities.First(x => x.Id == entity.Id);
-                model.Image = entity.Image;
                 model.Title = entity.Title;
                 model.UpdateAt = _dateTime;
                 model.Description = entity.Description;

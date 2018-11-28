@@ -283,10 +283,10 @@ namespace Persistence.Migrations
 
                     b.Property<decimal>("PriceHour");
 
-                    b.Property<int>("Rating");
-
-                    b.Property<string>("Testimony")
+                    b.Property<string>("Profesion")
                         .HasMaxLength(255);
+
+                    b.Property<int>("Rating");
 
                     b.Property<DateTime>("UpdateAt");
 
@@ -326,10 +326,6 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(200);
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasMaxLength(150);
 
                     b.Property<string>("Title")
                         .IsRequired()

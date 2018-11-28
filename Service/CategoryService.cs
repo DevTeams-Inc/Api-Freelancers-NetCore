@@ -76,6 +76,22 @@ namespace Service
             return result;
         }
 
+        public IEnumerable<Category> GetTree()
+        {
+            var result = new List<Category>();
+            try
+            {
+                result = _dbContext.Categories
+                    .OrderBy(x => x.Name)
+                    .Take(3).ToList();
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
         public bool Update(Category entity)
         {
             try

@@ -8,5 +8,6 @@ namespace Service.Interface
 {
     public interface ICategoryService : IRepository<Category>
     {
+        IEnumerable<Category> GetTree();
     }
 }

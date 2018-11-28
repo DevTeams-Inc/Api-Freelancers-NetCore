@@ -55,7 +55,7 @@ namespace Service
                     Rating = entity.Rating,
                     Lat = entity.Lat,
                     Long = entity.Long,
-                    Testimony = entity.Testimony            
+                    Profesion = entity.Profesion
                 };
 
                 //agregamos el freelancer
@@ -144,7 +144,7 @@ namespace Service
                         Level = i.Level,
                         Historial = i.Historial,
                         Rating = i.Rating,
-                        Testimony = i.Testimony,
+                        Profesion = i.Profesion,
                         LastName = i.ApplicationUser.LastName,
                         Name = i.ApplicationUser.Name,
                         Avatar = $"http://localhost:57455/img/{i.ApplicationUser.Avatar}",
@@ -187,8 +187,10 @@ namespace Service
                 freelancer.PriceHour = entity.PriceHour;
                 freelancer.Interest = entity.Interest;
                 freelancer.Historial = entity.Historial;
-                freelancer.Testimony = entity.Testimony;
+                freelancer.Profesion = entity.Profesion;
                 freelancer.UpdateAt = _dateTime;
+                freelancer.Long = entity.Long;
+                freelancer.Lat = entity.Lat;
                 _dbContext.Update(freelancer);
                 _dbContext.SaveChanges();
                 return true;
@@ -216,7 +218,7 @@ namespace Service
                 result.Level = freelancer.Level;
                 result.Historial = freelancer.Historial;
                 result.Rating = freelancer.Rating;
-                result.Testimony = freelancer.Testimony;
+                result.Profesion = freelancer.Profesion;
                 result.Name = user.Name;
                 result.LastName = user.LastName;
                 result.Avatar = $"http://localhost:57455/img/{user.Avatar}";
@@ -262,7 +264,7 @@ namespace Service
                 result.Level = freelancer.Level;
                 result.Historial = freelancer.Historial;
                 result.Rating = freelancer.Rating;
-                result.Testimony = freelancer.Testimony;
+                result.Profesion = freelancer.Profesion;
                 result.Name = user.Name;
                 result.LastName = user.LastName;
                 result.Avatar = $"http://localhost:57455/img/{user.Avatar}";
@@ -281,6 +283,114 @@ namespace Service
             {
                 result = null;
             }
+            return result;
+        }
+
+        public IEnumerable<FreelancerVm> GetTree()
+        {
+            var model = new List<Freelancer>();
+            var result = new List<FreelancerVm>();
+            try
+            {
+                model = _dbContext.Freelancers
+                        .Include(x => x.Habilities)
+                        .Include(x => x.ApplicationUser)
+                        .OrderByDescending(x => x.Rating)
+                        .Take(3).ToList();
+
+                foreach (var i in model)
+                {
+                    var freelancer = new FreelancerVm
+                    {
+                        ApplicationUserId = i.ApplicationUserId,
+                        Avatar = $"http://localhost:57455/img/{i.ApplicationUser.Avatar}",
+                        Name = i.ApplicationUser.Name,
+                        LastName = i.ApplicationUser.LastName,
+                        Rating = i.Rating
+                    };
+                    result.Add(freelancer);
+                }
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
+        public IEnumerable<FreelancerVm> Search(string parameter)
+        {
+            var result = new List<FreelancerVm>();
+            try
+            {
+                var freelancer = _dbContext.Freelancers
+                    .Include(x => x.ApplicationUser)
+                    .Include(x => x.Habilities)
+                    .Where(x => 
+                    x.ApplicationUser.Name.Contains(parameter) || 
+                    x.ApplicationUser.LastName.Contains(parameter) ||
+                    x.Profesion.Contains(parameter)).ToList();
+
+                /*
+                 * Si se encuentra un freelancer entonces lo añadira 
+                 * en el caso de que no se encuentre lo va a buscar en la habilidades
+                 * y si lo encuentra lo retornara
+                 */
+                if (freelancer.Count() != 0)
+                {
+                    foreach (var i in freelancer)
+                    {
+                        ApplicationUser user = _dbContext.ApplicationUsers.
+                            Single(x => x.Id == i.ApplicationUserId);
+
+                        var h = new List<Hability>();
+                        foreach (var j in i.Habilities)
+                        {
+                            h.Add(_habilityService.GetById(j.HabilityId));
+                        }
+
+                        var model = new FreelancerVm
+                        {
+                            Id = i.Id,
+                            Lenguaje = i.Lenguaje,
+                            PriceHour = i.PriceHour,
+                            Biography = i.Biography,
+                            Interest = i.Interest,
+                            Level = i.Level,
+                            Historial = i.Historial,
+                            Rating = i.Rating,
+                            Profesion = i.Profesion,
+                            Name = user.Name,
+                            LastName = user.LastName,
+                            Avatar = $"http://localhost:57455/img/{user.Avatar}",
+                            Lat = i.Lat,
+                            Long = i.Long,
+                            Email = user.Email,
+                            ApplicationUserId = user.Id,
+                            Habilities = h
+                        };
+
+                        result.Add(model);
+                    }
+                }
+                else
+                {
+                    var h = _dbContext.Habilities.First(x => x.Title.Contains(parameter));
+                    var freelancerHa = _dbContext.FreelancerHabilities
+                                        .Include(x => x.Hability)
+                                        .Where(x => x.Hability.Id == h.Id).ToList();
+                    foreach (var i in freelancerHa)
+                    {
+                        result.Add(GetById(i.FreelancerId));
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+
             return result;
         }
     }

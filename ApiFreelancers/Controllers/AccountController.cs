@@ -24,13 +24,15 @@ namespace ApiTokenJWT.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
+        private readonly IAccountService _accountService;
         private readonly DateTime _dateTime;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
-            IAuthService authService
+            IAuthService authService,
+            IAccountService accountService
             )
         {
             _userManager = userManager;
@@ -38,6 +40,15 @@ namespace ApiTokenJWT.Controllers
             this._configuration = configuration;
             _authService = authService;
             _dateTime = DateTime.Now;
+            _accountService = accountService;
+        }
+
+        [HttpGet]
+        [Route("")]
+        [Route("getall")]
+        public IActionResult Get()
+        {
+            return Ok(_accountService.GetAll());
         }
 
         [Route("create")]
@@ -55,7 +66,7 @@ namespace ApiTokenJWT.Controllers
                     Name = model.Name,
                     Role = 1,
                     CreatedAt = _dateTime,
-                    Avatar = "default.png" 
+                    Avatar = "768209b8-0006-4d33-80d6-740cf13d44a7.png"
                 };
 
 
@@ -96,6 +107,7 @@ namespace ApiTokenJWT.Controllers
                     userInfo.Name = model.Name;
                     userInfo.LastName = model.LastName;
                     userInfo.Id = model.Id;
+                    userInfo.Role = model.Role;
 
                     if (_authService.ValidateUser(model.Email))
                     {
@@ -120,7 +132,6 @@ namespace ApiTokenJWT.Controllers
             }
         }
 
-
         [HttpGet("{id}")]
         [Route("email")]
         public IActionResult Email(string key)
@@ -134,7 +145,6 @@ namespace ApiTokenJWT.Controllers
                 return BadRequest("key invalid");
             }
         }
-
 
         //con este metodo creamos el token
         private IActionResult BuildToken(UserVm model)

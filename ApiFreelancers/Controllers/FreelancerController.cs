@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -55,16 +56,17 @@ namespace ApiFreelancers.Controllers
             if (model.ApplicationUserId != null && model.PriceHour > 0 && model.Lenguaje != null
                 && model.Interest != null)
             {
-                var avatar = await _imageHandler.UploadImage(file);
-                if (avatar != null)
+
+                if (file == null)
                 {
-                    model.Avatar = avatar.ToString();
+                    model.Avatar = "d3697ecd-96f7-4bc0-b4df-de05673f7639.png";
                     _freelancer.Add(model);
                     return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id }, model);
                 }
                 else
                 {
-                    model.Avatar = "default.png";
+                    var avatar = await _imageHandler.UploadImage(file);
+                    model.Avatar = avatar.ToString();
                     _freelancer.Add(model);
                     return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id }, model);
                 }
@@ -78,7 +80,7 @@ namespace ApiFreelancers.Controllers
         [HttpPut]
         public IActionResult Put([FromBody] FreelancerVm model)
         {
-            if (model.Id > 0 && model.ApplicationUserId != null)
+            if (model.Id != 0)
             {
                 return Ok(_freelancer.Update(model));
             }
@@ -94,5 +96,28 @@ namespace ApiFreelancers.Controllers
             return Ok(_freelancer.Delete(id));
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("home")]
+        public IActionResult Home()
+        {
+            return Ok(_freelancer.GetTree());
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{query}")]
+        [Route("search")]
+        public IActionResult Search([FromQuery]string query)
+        {
+            var model = _freelancer.Search(query);
+            if (model != null)
+            {
+                return Ok(_freelancer.Search(query));
+            }
+            else
+            {
+                return BadRequest("No se encontraron resultados");
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace Model
         public string Historial { get; set; }
         public int Rating { get; set; }
         [StringLength(255)]
-        public string Testimony { get; set; }
+        public string Profesion { get; set; }
         [Required]
         public decimal Long { get; set; }
         [Required]
