@@ -27,11 +27,7 @@ namespace Model.Vm
         public decimal Long { get; set; }
         [Required]
         public decimal Lat { get; set; }
-
-        //account
-        [Required]
         public string LastName { get; set; }
-        [Required]
         public string Name { get; set; }
         public string Avatar { get; set; }
         [Required]

@@ -12,5 +12,7 @@ namespace Service.Interface
         FreelancerVm GetByIdUser(string id);
         IEnumerable<FreelancerVm> GetTree();
         IEnumerable<FreelancerVm> Search(string parameter);
+        IEnumerable<FreelancerAdminVm> GetAllAdmin();
+        bool UserExist(string id);
     }
 }

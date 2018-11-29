@@ -43,14 +43,6 @@ namespace ApiTokenJWT.Controllers
             _accountService = accountService;
         }
 
-        [HttpGet]
-        [Route("")]
-        [Route("getall")]
-        public IActionResult Get()
-        {
-            return Ok(_accountService.GetAll());
-        }
-
         [Route("create")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserVm model)

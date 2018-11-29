@@ -93,7 +93,16 @@ namespace ApiFreelancers.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return Ok(_freelancer.Delete(id));
+            var model = _freelancer.Delete(id);
+            if (model == true)
+            {
+                return Ok(_freelancer.Delete(id));
+            }
+            else
+            {
+                return BadRequest("ocurrio un error al eliminar");
+            }
+
         }
 
         [AllowAnonymous]
@@ -109,15 +118,37 @@ namespace ApiFreelancers.Controllers
         [Route("search")]
         public IActionResult Search([FromQuery]string query)
         {
-            var model = _freelancer.Search(query);
-            if (model != null)
+            if (query != null)
             {
-                return Ok(_freelancer.Search(query));
+                var model = _freelancer.Search(query);
+                if (model != null)
+                {
+                    return Ok(_freelancer.Search(query));
+                }
+                else
+                {
+                    return BadRequest("No se encontraron resultados");
+                }
             }
             else
             {
-                return BadRequest("No se encontraron resultados");
+                return Ok(_freelancer.GetAll(1));
             }
+            
+        }
+
+        [HttpGet]
+        [Route("admin/getall")]
+        public IActionResult GetAdmin()
+        {
+            return Ok(_freelancer.GetAllAdmin());
+        }
+
+        [HttpGet("{id}")]
+        [Route("exist")]
+        public IActionResult UserExist(string id)
+        {
+              return Ok(_freelancer.UserExist(id));
         }
     }
 }

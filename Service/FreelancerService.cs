@@ -30,6 +30,7 @@ namespace Service
             _accountService = accountService;
             _dateTime = DateTime.Now;
         }
+
         public bool Add(FreelancerVm entity)
         {
             try
@@ -329,8 +330,8 @@ namespace Service
                     .Where(x => 
                     x.ApplicationUser.Name.Contains(parameter) || 
                     x.ApplicationUser.LastName.Contains(parameter) ||
-                    x.Profesion.Contains(parameter)).ToList();
-
+                    x.Profesion.Contains(parameter) || 
+                    x.Rating.ToString().Contains(parameter)).ToList();
                 /*
                  * Si se encuentra un freelancer entonces lo añadira 
                  * en el caso de que no se encuentre lo va a buscar en la habilidades
@@ -392,6 +393,48 @@ namespace Service
             }
 
             return result;
+        }
+
+        public IEnumerable<FreelancerAdminVm> GetAllAdmin()
+        {
+            var result = new List<FreelancerAdminVm>();
+            try
+            {
+                var model = _dbContext.Freelancers
+                    .Include(x => x.ApplicationUser).ToList();
+                foreach (var i in model)
+                {
+                    FreelancerAdminVm user = new FreelancerAdminVm
+                    {
+                        Id = i.ApplicationUser.Id,
+                        FreelancerId = i.Id,
+                        Name = i.ApplicationUser.Name,
+                        LastName = i.ApplicationUser.LastName,
+                        Email = i.ApplicationUser.Email,
+                    };
+                    result.Add(user);
+                }
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
+        public bool UserExist(string id)
+        {
+            try
+            {
+                var model = _dbContext.Freelancers
+                            .Include(x => x.ApplicationUser)
+                            .First(x => x.ApplicationUser.Id == id);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
