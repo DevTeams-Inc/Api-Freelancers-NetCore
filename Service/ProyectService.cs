@@ -41,7 +41,7 @@ namespace Service
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -52,12 +52,15 @@ namespace Service
         {
             try
             {
+                var prop = _dbContext.Proposals.First(x => x.ProyectId == id);
+                _dbContext.Proposals.Remove(prop);
+                _dbContext.SaveChanges();
                 var model = _dbContext.Proyects.First(x => x.Id == id);
                 _dbContext.Remove(model);
                 _dbContext.SaveChanges();
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -123,7 +126,7 @@ namespace Service
                 result.RegisterByPage = quantityOfProyects;
                 result.TotalOfRegister = totalOfRegister;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result = null;
             }
@@ -190,5 +193,19 @@ namespace Service
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Proyect> GetAllAdmin()
+        {
+            var result = new List<Proyect>();
+            try
+            {
+                result = _dbContext.Proyects.ToList();
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+
+            return result;
+        }
     }
 }

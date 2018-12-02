@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Model;
 using Repository;
 using Service.Interface;
 using System;
@@ -53,7 +54,7 @@ namespace Service
             var result = new List<Category>();
             try
             {
-                result = _dbContext.Categories.ToList();
+                result = _dbContext.Categories.Include(x => x.Habilities).ToList();
             }
             catch (Exception)
             {
@@ -97,10 +98,10 @@ namespace Service
             try
             {
                 var model = _dbContext.Categories.First(x => x.Id == entity.Id);
+                model.Name = entity.Name;
                 model.Img = entity.Img;
                 model.UpdateAt = _dateTime;
                 model.Descripcion = entity.Descripcion;
-                model.Area = entity.Area;
                 _dbContext.Categories.Update(model);
                 _dbContext.SaveChanges();
                 return true;

@@ -1,12 +1,16 @@
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Service.deps.json
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Service.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Service.pdb
+C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Model.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Persistence.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Repository.dll
+C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\StackExchange.Redis.StrongName.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Model.pdb
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Persistence.pdb
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Repository.pdb
+C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Microsoft.AspNetCore.Mvc.Abstractions.xml
+C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\StackExchange.Redis.StrongName.xml
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.csprojAssemblyReference.cache
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.csproj.CoreCompileInputs.cache
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.AssemblyInfoInputs.cache
@@ -14,7 +18,3 @@ C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Servi
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.csproj.CopyComplete
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Service\obj\Debug\netcoreapp2.0\Service.pdb
-C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\StackExchange.Redis.StrongName.dll
-C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\StackExchange.Redis.StrongName.xml
-C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll
-C:\Users\orbis\Source\repos\ApiFreelancers\Service\bin\Debug\netcoreapp2.0\Microsoft.AspNetCore.Mvc.Abstractions.xml

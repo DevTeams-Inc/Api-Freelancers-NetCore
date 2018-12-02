@@ -10,7 +10,9 @@
         "dependencies": {
           "Model": "1.0.0",
           "Persistence": "1.0.0",
-          "Repository": "1.0.0"
+          "Repository": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.Abstractions": "2.0.4.0",
+          "StackExchange.Redis.StrongName": "1.2.4.0"
         },
         "runtime": {
           "Service.dll": {}
@@ -853,6 +855,16 @@
         "runtime": {
           "Repository.dll": {}
         }
+      },
+      "Microsoft.AspNetCore.Mvc.Abstractions/2.0.4.0": {
+        "runtime": {
+          "Microsoft.AspNetCore.Mvc.Abstractions.dll": {}
+        }
+      },
+      "StackExchange.Redis.StrongName/1.2.4.0": {
+        "runtime": {
+          "StackExchange.Redis.StrongName.dll": {}
+        }
       }
     }
   },
@@ -1539,6 +1551,16 @@
     },
     "Repository/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.Mvc.Abstractions/2.0.4.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "StackExchange.Redis.StrongName/1.2.4.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

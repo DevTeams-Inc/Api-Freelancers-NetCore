@@ -22,6 +22,7 @@ namespace Service
             {
                 var model = _dbContext.ApplicationUsers.Single(x => x.Id == entity.Id);
                 model.Avatar = entity.Avatar;
+                model.PhoneNumber = entity.PhoneNumber;
                 _dbContext.Update(model);
                 _dbContext.SaveChanges();
                 return true;

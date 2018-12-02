@@ -29,6 +29,14 @@ namespace ApiFreelancers.Controllers
             return Ok(_proyect.GetAll(page));
         }
 
+        [HttpGet]
+        [Route("admin/getall")]
+        public IActionResult GetAdmin()
+        {
+            return Ok(_proyect.GetAllAdmin());
+        }
+
+
         [HttpGet("{id}" , Name = "GetByIdProyect")]
         [Route("getproyect/{id}")]
         public IActionResult GetProyect(int id)

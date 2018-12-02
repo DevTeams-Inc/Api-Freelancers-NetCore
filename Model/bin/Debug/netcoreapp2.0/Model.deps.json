@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v2.0": {
       "Model/1.0.0": {
         "dependencies": {
-          "Microsoft.Extensions.Identity.Stores": "2.0.3.0"
+          "Microsoft.Extensions.Identity.Stores": "2.0.3.0",
+          "Newtonsoft.Json": "10.0.0.0"
         },
         "runtime": {
           "Model.dll": {}
@@ -17,6 +18,11 @@
       "Microsoft.Extensions.Identity.Stores/2.0.3.0": {
         "runtime": {
           "Microsoft.Extensions.Identity.Stores.dll": {}
+        }
+      },
+      "Newtonsoft.Json/10.0.0.0": {
+        "runtime": {
+          "Newtonsoft.Json.dll": {}
         }
       }
     }
@@ -28,6 +34,11 @@
       "sha512": ""
     },
     "Microsoft.Extensions.Identity.Stores/2.0.3.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Newtonsoft.Json/10.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

@@ -13,6 +13,8 @@ namespace Service.Interface
         IEnumerable<FreelancerVm> GetTree();
         IEnumerable<FreelancerVm> Search(string parameter);
         IEnumerable<FreelancerAdminVm> GetAllAdmin();
+        IEnumerable<FreelancerMapVm> GetAllMap();
         bool UserExist(string id);
+        bool Contact(ContactVm model);
     }
 }

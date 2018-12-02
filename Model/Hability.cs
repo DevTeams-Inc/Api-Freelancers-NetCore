@@ -16,5 +16,9 @@ namespace Model
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
+
+        [Required]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

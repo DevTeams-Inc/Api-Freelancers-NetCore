@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Model;
+using Model.Vm;
 using Service.Interface;
 
 namespace ApiTokenJWT.Controllers
@@ -25,6 +26,8 @@ namespace ApiTokenJWT.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
         private readonly IAccountService _accountService;
+        private readonly IImageWriter _imageHandler;
+
         private readonly DateTime _dateTime;
 
         public AccountController(
@@ -32,7 +35,8 @@ namespace ApiTokenJWT.Controllers
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
             IAuthService authService,
-            IAccountService accountService
+            IAccountService accountService,
+             IImageWriter imageHandler
             )
         {
             _userManager = userManager;
@@ -41,6 +45,7 @@ namespace ApiTokenJWT.Controllers
             _authService = authService;
             _dateTime = DateTime.Now;
             _accountService = accountService;
+            _imageHandler = imageHandler;
         }
 
         [Route("create")]
@@ -172,6 +177,27 @@ namespace ApiTokenJWT.Controllers
                 User = model
             });
 
+        }
+
+        [HttpPost]
+        [Route("img/upload")]
+        public async Task<IActionResult> UploadImg([FromForm] IFormFile file, [FromForm] string id)
+        {
+
+            if (file != null && id != null)
+            {
+                string avatar = await _imageHandler.UploadImage(file);
+                var model = new UpdateByFreelancerUserVm
+                { 
+                    Id = id,
+                    Avatar = avatar
+                };
+                return Ok(_accountService.UpdateByFreelancer(model));
+            }
+            else
+            {
+                return BadRequest("Ocurrio un error al cargar la imagen");
+            }
         }
 
     }

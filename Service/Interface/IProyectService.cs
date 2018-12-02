@@ -9,5 +9,6 @@ namespace Service.Interface
 {
     public interface IProyectService : IRepository<ProyectVm> , IRepositoryPagination<ProyectVm>
     {
+        IEnumerable<Proyect> GetAllAdmin();
     }
 }

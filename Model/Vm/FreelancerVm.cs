@@ -31,6 +31,8 @@ namespace Model.Vm
         public string Name { get; set; }
         public string Avatar { get; set; }
         [Required]
+        public string PhoneNumber { get; set; }
+        [Required]
         public string Email { get; set; }
         public string ApplicationUserId { get; set; }
 

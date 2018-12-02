@@ -73,7 +73,15 @@ namespace ApiFreelancers.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            return Ok(_category.Delete(id));
+            var model =  _category.Delete(id);
+            if (model)
+            {
+                return Ok(model);
+            }
+            else
+            {
+                return BadRequest("Failed delete category");
+            }
         }
 
         [AllowAnonymous]

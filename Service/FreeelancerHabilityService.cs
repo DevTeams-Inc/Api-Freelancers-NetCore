@@ -32,7 +32,45 @@ namespace Service
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var model = _dbContext.FreelancerHabilities.First(x => x.HabilityId == id);
+                _dbContext.Remove(model);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteByFreelancerAndHability(int freelancerId, int habilityId)
+        {
+            try
+            {
+                var model = _dbContext.FreelancerHabilities.First(x => x.HabilityId == habilityId && x.FreelancerId ==  freelancerId);
+                _dbContext.Remove(model);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool Exist(int freelancerId, int habilityId)
+        {
+            try
+            {
+                var model = _dbContext.FreelancerHabilities.First(x => x.HabilityId == habilityId && x.FreelancerId == freelancerId);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public IEnumerable<FreelancerHability> GetAll()

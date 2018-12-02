@@ -2,7 +2,9 @@ C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Model.d
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Model.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Model.pdb
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Newtonsoft.Json.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Microsoft.Extensions.Identity.Stores.xml
+C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Newtonsoft.Json.xml
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.csprojAssemblyReference.cache
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.csproj.CoreCompileInputs.cache
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.AssemblyInfoInputs.cache
@@ -10,5 +12,3 @@ C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.A
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.csproj.CopyComplete
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.dll
 C:\Users\orbis\Source\repos\ApiFreelancers\Model\obj\Debug\netcoreapp2.0\Model.pdb
-C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Newtonsoft.Json.dll
-C:\Users\orbis\Source\repos\ApiFreelancers\Model\bin\Debug\netcoreapp2.0\Newtonsoft.Json.xml

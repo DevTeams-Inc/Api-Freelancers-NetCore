@@ -228,10 +228,6 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Area")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Descripcion")
@@ -322,6 +318,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoryId");
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Description")
@@ -334,6 +332,8 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdateAt");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Habilities");
                 });
@@ -386,8 +386,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255);
+                        .IsRequired();
 
                     b.Property<decimal>("Price");
 
@@ -486,6 +485,14 @@ namespace Persistence.Migrations
                     b.HasOne("Model.Hability", "Hability")
                         .WithMany()
                         .HasForeignKey("HabilityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Model.Hability", b =>
+                {
+                    b.HasOne("Model.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

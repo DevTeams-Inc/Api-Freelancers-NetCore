@@ -18,11 +18,14 @@ namespace ApiFreelancers.Controllers
     {
         private readonly IFreelancerService _freelancer;
         private readonly IImageWriter _imageHandler;
+        private readonly IFreelancerHabilityService _freelancerHabilityService;
         public FreelancerController(IFreelancerService freelancer ,
-            IImageWriter imageHandler)
+            IImageWriter imageHandler ,
+            IFreelancerHabilityService freelancerHabilityService)
         {
             _freelancer = freelancer;
             _imageHandler = imageHandler;
+            _freelancerHabilityService = freelancerHabilityService;
         }
 
         [HttpGet]
@@ -50,26 +53,15 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] FreelancerVm model, [FromForm]IFormFile file)
+        public IActionResult Post([FromBody] FreelancerVm model)
         {
 
             if (model.ApplicationUserId != null && model.PriceHour > 0 && model.Lenguaje != null
                 && model.Interest != null)
             {
-
-                if (file == null)
-                {
                     model.Avatar = "d3697ecd-96f7-4bc0-b4df-de05673f7639.png";
                     _freelancer.Add(model);
                     return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id }, model);
-                }
-                else
-                {
-                    var avatar = await _imageHandler.UploadImage(file);
-                    model.Avatar = avatar.ToString();
-                    _freelancer.Add(model);
-                    return new CreatedAtRouteResult("freelancerCreated", new { id = model.Id }, model);
-                }
             }
             else
             {
@@ -145,10 +137,46 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpGet("{id}")]
-        [Route("exist")]
+        [Route("exist/{id}")]
         public IActionResult UserExist(string id)
         {
               return Ok(_freelancer.UserExist(id));
+        }
+
+        [HttpGet]
+        [Route("map")]
+        public IActionResult Map()
+        {
+            return Ok(_freelancer.GetAllMap());
+        }
+
+        [HttpPost]
+        [Route("contact")]
+        public IActionResult Contact([FromBody] ContactVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                return Ok(_freelancer.Contact(model));
+            }
+            else
+            {
+                return BadRequest("Error contact failure");
+            }
+        }
+
+        [HttpPost]
+        [Route("delete/hability")]
+        public IActionResult DeleteHability([FromBody] DeleteHabilityVm model)
+        {
+            var result = _freelancerHabilityService.DeleteByFreelancerAndHability(model.Freelancer, model.Hability);
+            if (result)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest("Error to delete the hability");
+            }
         }
     }
 }

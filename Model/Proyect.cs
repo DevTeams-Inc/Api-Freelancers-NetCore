@@ -16,7 +16,6 @@ namespace Model
         [StringLength(40)]
         public string Title { get; set; }
         [Required]
-        [StringLength(255)]
         public string Description { get; set; }
         [StringLength(100)]
         public string Required_Skill { get; set; }

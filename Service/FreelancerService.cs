@@ -7,6 +7,8 @@ using Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 
 namespace Service
@@ -17,6 +19,8 @@ namespace Service
         private readonly IFreelancerHabilityService _freelancerHabilityService;
         private readonly IHabilityService _habilityService;
         private readonly IAccountService _accountService;
+        private readonly string _imgServer = $"http://localhost:57455/img/";
+       // private readonly string _imgServer = $"http://192.168.96.117:45455/img/";
 
         private readonly DateTime _dateTime;
         public FreelancerService(ApplicationDbContext dbContext,
@@ -38,6 +42,7 @@ namespace Service
                 UpdateByFreelancerUserVm user = new UpdateByFreelancerUserVm
                 {
                     Id = entity.ApplicationUserId,
+                    PhoneNumber = entity.PhoneNumber,
                     Avatar = entity.Avatar
                 };
                 _accountService.UpdateByFreelancer(user);
@@ -153,6 +158,7 @@ namespace Service
                         Habilities = h,
                         Lat = i.Lat,
                         Long = i.Long,
+                        PhoneNumber = i.ApplicationUser.PhoneNumber,
                         ApplicationUserId = i.ApplicationUser.Id
                         
                     };
@@ -178,9 +184,12 @@ namespace Service
                 var freelancer = _dbContext.Freelancers.
                     First(x => x.Id == entity.Id);
                 var user = _dbContext.ApplicationUsers.First(x => x.Id == freelancer.ApplicationUserId);
+                
                 //ApplicationUser
                 user.Name = entity.Name;
+                user.PhoneNumber = entity.PhoneNumber;
                 user.LastName = entity.LastName;
+
                 _dbContext.ApplicationUsers.Update(user);
                 //freelancer
                 freelancer.Lenguaje = entity.Lenguaje;
@@ -194,6 +203,23 @@ namespace Service
                 freelancer.Lat = entity.Lat;
                 _dbContext.Update(freelancer);
                 _dbContext.SaveChanges();
+
+                FreelancerHability freelancerHability;
+                foreach (var i in entity.Habilities)
+                {
+                    //si existe no la agreges si no agregala
+                    if(!_freelancerHabilityService.Exist(entity.Id, i.Id))
+                    {
+                        freelancerHability = new FreelancerHability
+                        {
+                            FreelancerId = entity.Id,
+                            HabilityId = i.Id
+                        };
+                        _freelancerHabilityService.Add(freelancerHability);
+                    }                    
+                }
+
+
                 return true;
             }
             catch (Exception)
@@ -226,6 +252,7 @@ namespace Service
                 result.Lat = freelancer.Lat;
                 result.Long = freelancer.Long;
                 result.Email = user.Email;
+                result.PhoneNumber = user.PhoneNumber; 
                 result.ApplicationUserId = user.Id;
                 var h = new List<Hability>();
                 foreach (var i in freelancer.Habilities )
@@ -272,6 +299,7 @@ namespace Service
                 result.Lat = freelancer.Lat;
                 result.Long = freelancer.Long;
                 result.Email = user.Email;
+                result.PhoneNumber = user.PhoneNumber;
                 result.ApplicationUserId = user.Id;
                 var h = new List<Hability>();
                 foreach (var i in freelancer.Habilities)
@@ -330,8 +358,7 @@ namespace Service
                     .Where(x => 
                     x.ApplicationUser.Name.Contains(parameter) || 
                     x.ApplicationUser.LastName.Contains(parameter) ||
-                    x.Profesion.Contains(parameter) || 
-                    x.Rating.ToString().Contains(parameter)).ToList();
+                    x.Profesion.Contains(parameter)).ToList();
                 /*
                  * Si se encuentra un freelancer entonces lo añadira 
                  * en el caso de que no se encuentre lo va a buscar en la habilidades
@@ -367,6 +394,7 @@ namespace Service
                             Lat = i.Lat,
                             Long = i.Long,
                             Email = user.Email,
+                            PhoneNumber = user.PhoneNumber,
                             ApplicationUserId = user.Id,
                             Habilities = h
                         };
@@ -429,6 +457,80 @@ namespace Service
                 var model = _dbContext.Freelancers
                             .Include(x => x.ApplicationUser)
                             .First(x => x.ApplicationUser.Id == id);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public IEnumerable<FreelancerMapVm> GetAllMap()
+        {
+            var result = new List<FreelancerMapVm>();
+            try
+            {
+                var model = _dbContext.Freelancers.Include(x => x.ApplicationUser).ToList();
+
+                FreelancerMapVm freelancer;
+                foreach(var m in model)
+                {
+                    freelancer = new FreelancerMapVm
+                    {
+                        FullName = $"{m.ApplicationUser.Name} {m.ApplicationUser.LastName}",
+                        Avatar = $"{_imgServer}{m.ApplicationUser.Avatar}",
+                        Id = m.ApplicationUserId,
+                        Profession = m.Profesion,
+                        Long = m.Long,
+                        Lat = m.Lat
+                    };
+
+                    result.Add(freelancer);
+                }
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
+        public bool Contact(ContactVm model)
+        {
+            try
+            {
+                MailMessage mssg = new MailMessage();
+                mssg.To.Add(model.EmailDestiny);
+                mssg.Subject = "Alguien lo ha contactado";
+                mssg.SubjectEncoding = Encoding.UTF8;
+                mssg.Bcc.Add(model.EmailDestiny);
+
+
+                string body = $"Ha sido contactado por {model.FullName}" +
+                              $"<br/>" +
+                              $"{model.Message}"+
+                              $"<br/>"+
+                              $"Contactalo por este correo {model.EmailFrom}";
+                      
+                mssg.Body = body;
+                mssg.BodyEncoding = Encoding.UTF8;
+                mssg.IsBodyHtml = true;
+                mssg.From = new MailAddress("orbisalonzo25@gmail.com");
+
+                SmtpClient user = new SmtpClient();
+                user.Credentials = new NetworkCredential("orbisalonzo25@gmail.com", "alonzo26");
+                user.Port = 587;
+                user.EnableSsl = true;
+                user.Host = "smtp.gmail.com";
+
+                try
+                {
+                    user.Send(mssg);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
                 return true;
             }
             catch (Exception)

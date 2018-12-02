@@ -12,16 +12,17 @@ namespace Model
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
-        [Required]
-        [StringLength(100)]
-        public string Area { get; set; }
+        
         [Required]
         [StringLength(255)]
         public string Descripcion { get; set; }
         [StringLength(255)]
         public string Img { get; set; }
-        [Required]
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
+
+        public IEnumerable<Hability> Habilities { get; set; }
+        
     }
 }
