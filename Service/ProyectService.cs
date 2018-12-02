@@ -41,7 +41,7 @@ namespace Service
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -60,7 +60,7 @@ namespace Service
                 _dbContext.SaveChanges();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -126,7 +126,7 @@ namespace Service
                 result.RegisterByPage = quantityOfProyects;
                 result.TotalOfRegister = totalOfRegister;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result = null;
             }
