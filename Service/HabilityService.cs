@@ -63,6 +63,20 @@ namespace Service
             return model;
         }
 
+        public IEnumerable<Hability> GetByCategoryId(int id)
+        {
+            var result = new List<Hability>();
+            try
+            {
+                result = _dbContext.Habilities.Where(x => x.CategoryId == id).ToList();
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            return result;
+        }
+
         public Hability GetById(int id)
         {
             var result = new Hability();

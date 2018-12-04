@@ -358,11 +358,10 @@ namespace Service
                     .Where(x => 
                     x.ApplicationUser.Name.Contains(parameter) || 
                     x.ApplicationUser.LastName.Contains(parameter) ||
-                    x.Profesion.Contains(parameter)).ToList();
+                    x.Profesion.Contains(parameter) ||
+                    x.Interest.Contains(parameter)).ToList();
                 /*
                  * Si se encuentra un freelancer entonces lo añadira 
-                 * en el caso de que no se encuentre lo va a buscar en la habilidades
-                 * y si lo encuentra lo retornara
                  */
                 if (freelancer.Count() != 0)
                 {
@@ -402,18 +401,6 @@ namespace Service
                         result.Add(model);
                     }
                 }
-                else
-                {
-                    var h = _dbContext.Habilities.First(x => x.Title.Contains(parameter));
-                    var freelancerHa = _dbContext.FreelancerHabilities
-                                        .Include(x => x.Hability)
-                                        .Where(x => x.Hability.Id == h.Id).ToList();
-                    foreach (var i in freelancerHa)
-                    {
-                        result.Add(GetById(i.FreelancerId));
-                    }
-                }
-
             }
             catch (Exception)
             {
@@ -517,11 +504,13 @@ namespace Service
                 mssg.IsBodyHtml = true;
                 mssg.From = new MailAddress("orbisalonzo25@gmail.com");
 
-                SmtpClient user = new SmtpClient();
-                user.Credentials = new NetworkCredential("orbisalonzo25@gmail.com", "alonzo26");
-                user.Port = 587;
-                user.EnableSsl = true;
-                user.Host = "smtp.gmail.com";
+                SmtpClient user = new SmtpClient
+                {
+                    Credentials = new NetworkCredential("orbisalonzo25@gmail.com", "alonzo26"),
+                    Port = 587,
+                    EnableSsl = true,
+                    Host = "smtp.gmail.com"
+                };
 
                 try
                 {
@@ -537,6 +526,92 @@ namespace Service
             {
                 return false;
             }
+        }
+
+        public IEnumerable<FreelancerVm> Filter(int?idHability, int? rating)
+        {
+            var result = new List<FreelancerVm>();
+            var resultadoF = new List<Freelancer>();
+            var freelancers = _dbContext.Freelancers.ToList();
+            var resultadoFF = new List<Freelancer>();
+            var l = new List<FreelancerHability>();
+
+            bool rate(Freelancer x) => !rating.HasValue || rating.Value == x.Rating;
+            var habilidadselecionada = new List<Hability>();
+            if (idHability != null)
+            {
+                foreach (var item in _dbContext.Habilities)
+                {
+                    var hability = _dbContext.Habilities.FirstOrDefault(x => x.Id == idHability.Value);
+                    if (hability != null) { habilidadselecionada.Add(hability); break; }
+                }
+                if (habilidadselecionada.Count() == 1)
+                {
+                    foreach (var item in habilidadselecionada)
+                    {
+                        l = _dbContext.FreelancerHabilities.Where(x => x.HabilityId == item.Id).ToList();
+                        foreach (var o in l)
+                        {
+                            var k = _dbContext.Freelancers.Include(x => x.ApplicationUser).Where(x => x.Id == o.FreelancerId)
+                                   .Where(rate).ToList();
+                            foreach (var d in k)
+                            {
+                                resultadoF.Add(d);
+                            }
+                        }
+                    }
+                    foreach (var q in resultadoF)
+                    {
+                        resultadoFF.Add(q);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var g in _dbContext.Freelancers.Include(x => x.ApplicationUser).Include(x => x.Habilities).
+                                  Where(rate).ToList())
+                {
+                    resultadoFF.Add(g);
+                }
+
+            }
+            foreach (var final in resultadoFF)
+            {
+
+                var frelancer = new FreelancerVm
+                {
+                    ApplicationUserId = final.ApplicationUserId,
+                    Id = final.Id,
+                    Name = final.ApplicationUser.Name,
+                    LastName = final.ApplicationUser.LastName,
+                    PriceHour = final.PriceHour,
+                    Biography = final.Biography,
+                    Avatar = $"{_imgServer}{final.ApplicationUser.Avatar}",
+                    Profesion = final.Profesion,
+                    Long = final.Long,
+                    Lat = final.Lat,
+
+                    Rating = final.Rating,
+                    Email = final.ApplicationUser.Email
+                };
+                var h = new List<Hability>();
+                var a = final.Habilities;
+                if (final.Habilities != null)
+                {
+                    foreach (var i in final.Habilities)
+                    {
+                        h.Add(_habilityService.GetById(i.HabilityId));
+
+                    }
+                }
+                frelancer.Habilities = h;
+
+                result.Add(frelancer);
+            }
+
+
+            return result;
+
         }
     }
 }

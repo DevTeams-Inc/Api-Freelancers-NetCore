@@ -8,5 +8,6 @@ namespace Service.Interface
 {
     public interface IHabilityService : IRepository<Hability>
     {
+        IEnumerable<Hability> GetByCategoryId(int id);
     }
 }

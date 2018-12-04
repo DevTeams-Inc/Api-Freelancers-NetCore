@@ -20,6 +20,7 @@ namespace ApiFreelancers.Controllers
         }
 
         [HttpGet("{id}", Name = "createdHability")]
+        [Route("getbyid/{id}")]
         public IActionResult Get(int id)
         {
             var model = _hablility.GetById(id);
@@ -69,6 +70,21 @@ namespace ApiFreelancers.Controllers
         public IActionResult Delete(int id)
         {
              return Ok(_hablility.Delete(id));
+        }
+
+        [HttpGet("{idCategory}")]
+        [Route("getby/category/{idCategory}")]
+        public IActionResult GetByCategory(int idCategory)
+        {
+            var model = _hablility.GetByCategoryId(idCategory);
+            if (model != null)
+            {
+                return Ok(model);
+            }
+            else
+            {
+                return BadRequest("No existen habilidades con esa categoria");
+            }
         }
     }
 }

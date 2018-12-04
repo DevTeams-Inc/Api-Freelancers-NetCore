@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace ApiFreelancers.Controllers
 {
     [Produces("application/json")]
     [Route("api/freelancers")]
+  //  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FreelancerController : Controller
     {
         private readonly IFreelancerService _freelancer;
@@ -177,6 +179,13 @@ namespace ApiFreelancers.Controllers
             {
                 return BadRequest("Error to delete the hability");
             }
+        }
+
+        [HttpGet("{idHability,rate}")]
+        [Route("filter")]
+        public IActionResult Filter([FromQuery]int? idHability, [FromQuery]int? rate)
+        {
+            return Ok(_freelancer.Filter(idHability, rate));
         }
     }
 }

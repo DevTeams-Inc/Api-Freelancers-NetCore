@@ -16,5 +16,6 @@ namespace Service.Interface
         IEnumerable<FreelancerMapVm> GetAllMap();
         bool UserExist(string id);
         bool Contact(ContactVm model);
+        IEnumerable<FreelancerVm> Filter(int? idHability, int? Rate);
     }
 }
