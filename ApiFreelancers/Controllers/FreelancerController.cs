@@ -54,6 +54,13 @@ namespace ApiFreelancers.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        [Route("edit/{id}")]
+        public IActionResult GetById(int id)
+        {
+            return Ok(_freelancer.GetById(id));
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] FreelancerVm model)
         {
@@ -170,15 +177,24 @@ namespace ApiFreelancers.Controllers
         [Route("delete/hability")]
         public IActionResult DeleteHability([FromBody] DeleteHabilityVm model)
         {
-            var result = _freelancerHabilityService.DeleteByFreelancerAndHability(model.Freelancer, model.Hability);
-            if (result)
+            if (ModelState.IsValid)
             {
-                return Ok(result);
+                var result = _freelancerHabilityService.DeleteByFreelancerAndHability(model.Freelancer, model.Hability);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest("Error to delete the hability");
+                }
             }
             else
             {
-                return BadRequest("Error to delete the hability");
+                return BadRequest("Esa habilidad o freelancer no existe");
+
             }
+
         }
 
         [HttpGet("{idHability,rate}")]

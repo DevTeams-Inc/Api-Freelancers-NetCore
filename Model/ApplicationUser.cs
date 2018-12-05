@@ -16,6 +16,7 @@ namespace Model
         public string Name { get; set; }
         [StringLength(150)]
         public string Avatar { get; set; }
+        public string Address { get; set; }
         [Required]
         public int Role { get; set; }
         [Required]

@@ -19,20 +19,23 @@ namespace Service
         private readonly IFreelancerHabilityService _freelancerHabilityService;
         private readonly IHabilityService _habilityService;
         private readonly IAccountService _accountService;
-        private readonly string _imgServer = $"http://localhost:57455/img/";
-       // private readonly string _imgServer = $"http://192.168.96.117:45455/img/";
+        private readonly IContactService _contactService;
+        //private readonly string _imgServer = $"http://localhost:57455/img/";
+        private readonly string _imgServer = $"http://192.168.1.139:45455/img/";
 
         private readonly DateTime _dateTime;
         public FreelancerService(ApplicationDbContext dbContext,
             IFreelancerHabilityService freelancerHabilityService, 
             IHabilityService habilityService, 
-            IAccountService accountService)
+            IAccountService accountService,
+            IContactService contactService)
         {
             _dbContext = dbContext;
             _freelancerHabilityService = freelancerHabilityService;
             _habilityService = habilityService;
             _accountService = accountService;
             _dateTime = DateTime.Now;
+            _contactService = contactService;
         }
 
         public bool Add(FreelancerVm entity)
@@ -43,7 +46,8 @@ namespace Service
                 {
                     Id = entity.ApplicationUserId,
                     PhoneNumber = entity.PhoneNumber,
-                    Avatar = entity.Avatar
+                    Avatar = entity.Avatar,
+                    Address = entity.Address
                 };
                 _accountService.UpdateByFreelancer(user);
 
@@ -53,7 +57,7 @@ namespace Service
                     CreatedAt = _dateTime,
                     ApplicationUserId = entity.ApplicationUserId,
                     Biography = entity.Biography,
-                    Historial = entity.Historial,
+                    Historial = entity.Address,
                     Interest = entity.Interest,
                     Lenguaje = entity.Lenguaje,
                     Level = entity.Level,
@@ -148,12 +152,12 @@ namespace Service
                         Biography = i.Biography,
                         Interest = i.Interest,
                         Level = i.Level,
-                        Historial = i.Historial,
+                        Address = i.ApplicationUser.Address,
                         Rating = i.Rating,
                         Profesion = i.Profesion,
                         LastName = i.ApplicationUser.LastName,
                         Name = i.ApplicationUser.Name,
-                        Avatar = $"http://localhost:57455/img/{i.ApplicationUser.Avatar}",
+                        Avatar = $"{_imgServer}{i.ApplicationUser.Avatar}",
                         Email = i.ApplicationUser.Email,
                         Habilities = h,
                         Lat = i.Lat,
@@ -170,7 +174,7 @@ namespace Service
                 result.TotalOfRegister = totalOfRegister;
                 result.RegisterByPage = quantityOfPerson;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result = null;
             }
@@ -196,7 +200,7 @@ namespace Service
                 freelancer.Biography = entity.Biography;
                 freelancer.PriceHour = entity.PriceHour;
                 freelancer.Interest = entity.Interest;
-                freelancer.Historial = entity.Historial;
+                freelancer.ApplicationUser.Address = entity.Address;
                 freelancer.Profesion = entity.Profesion;
                 freelancer.UpdateAt = _dateTime;
                 freelancer.Long = entity.Long;
@@ -243,12 +247,12 @@ namespace Service
                 result.Biography = freelancer.Biography;
                 result.Interest = freelancer.Interest;
                 result.Level = freelancer.Level;
-                result.Historial = freelancer.Historial;
+                result.Address = freelancer.ApplicationUser.Address;
                 result.Rating = freelancer.Rating;
                 result.Profesion = freelancer.Profesion;
                 result.Name = user.Name;
                 result.LastName = user.LastName;
-                result.Avatar = $"http://localhost:57455/img/{user.Avatar}";
+                result.Avatar = $"{_imgServer}{user.Avatar}";
                 result.Lat = freelancer.Lat;
                 result.Long = freelancer.Long;
                 result.Email = user.Email;
@@ -290,12 +294,12 @@ namespace Service
                 result.Biography = freelancer.Biography;
                 result.Interest = freelancer.Interest;
                 result.Level = freelancer.Level;
-                result.Historial = freelancer.Historial;
+                result.Address = freelancer.ApplicationUser.Address;
                 result.Rating = freelancer.Rating;
                 result.Profesion = freelancer.Profesion;
                 result.Name = user.Name;
                 result.LastName = user.LastName;
-                result.Avatar = $"http://localhost:57455/img/{user.Avatar}";
+                result.Avatar = $"{_imgServer}{user.Avatar}";
                 result.Lat = freelancer.Lat;
                 result.Long = freelancer.Long;
                 result.Email = user.Email;
@@ -332,7 +336,7 @@ namespace Service
                     var freelancer = new FreelancerVm
                     {
                         ApplicationUserId = i.ApplicationUserId,
-                        Avatar = $"http://localhost:57455/img/{i.ApplicationUser.Avatar}",
+                        Avatar = $"{_imgServer}{i.ApplicationUser.Avatar}",
                         Name = i.ApplicationUser.Name,
                         LastName = i.ApplicationUser.LastName,
                         Rating = i.Rating
@@ -384,7 +388,7 @@ namespace Service
                             Biography = i.Biography,
                             Interest = i.Interest,
                             Level = i.Level,
-                            Historial = i.Historial,
+                            Address = i.ApplicationUser.Address,
                             Rating = i.Rating,
                             Profesion = i.Profesion,
                             Name = user.Name,
@@ -515,6 +519,12 @@ namespace Service
                 try
                 {
                     user.Send(mssg);
+                    Contact contact = new Contact
+                    {
+                        ApplicationUserId = model.ApplicationUserId,
+                        FromId = model.FromId
+                    };
+                    _contactService.Add(contact);
                 }
                 catch (Exception)
                 {
@@ -552,7 +562,7 @@ namespace Service
                         l = _dbContext.FreelancerHabilities.Where(x => x.HabilityId == item.Id).ToList();
                         foreach (var o in l)
                         {
-                            var k = _dbContext.Freelancers.Include(x => x.ApplicationUser).Where(x => x.Id == o.FreelancerId)
+                            var k = _dbContext.Freelancers.Include(x => x.ApplicationUser).Include(x => x.Habilities).Where(x => x.Id == o.FreelancerId)
                                    .Where(rate).ToList();
                             foreach (var d in k)
                             {
@@ -613,5 +623,6 @@ namespace Service
             return result;
 
         }
+        
     }
 }

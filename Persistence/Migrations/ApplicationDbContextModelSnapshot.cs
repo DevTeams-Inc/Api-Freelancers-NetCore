@@ -161,6 +161,8 @@ namespace Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("Address");
+
                     b.Property<string>("Avatar")
                         .HasMaxLength(150);
 
@@ -246,6 +248,27 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Model.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("FromId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Model.Freelancer", b =>
@@ -411,6 +434,31 @@ namespace Persistence.Migrations
                     b.ToTable("Proyects");
                 });
 
+            modelBuilder.Entity("Model.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<int>("FreelancerId");
+
+                    b.Property<int>("Rate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("FreelancerId");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -468,6 +516,14 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Model.Contact", b =>
+                {
+                    b.HasOne("Model.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Model.Freelancer", b =>
                 {
                     b.HasOne("Model.ApplicationUser", "ApplicationUser")
@@ -491,7 +547,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Model.Hability", b =>
                 {
                     b.HasOne("Model.Category", "Category")
-                        .WithMany()
+                        .WithMany("Habilities")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -519,6 +575,18 @@ namespace Persistence.Migrations
                     b.HasOne("Model.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Model.Rating", b =>
+                {
+                    b.HasOne("Model.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Model.Freelancer", "Freelancer")
+                        .WithMany()
+                        .HasForeignKey("FreelancerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

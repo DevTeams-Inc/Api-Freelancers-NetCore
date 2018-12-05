@@ -10,5 +10,6 @@ namespace Service.Interface
     public interface IAccountService
     {
         bool UpdateByFreelancer(UpdateByFreelancerUserVm entity);
+        bool Exist(string id);
     }
 }

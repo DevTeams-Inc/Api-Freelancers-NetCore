@@ -15,5 +15,9 @@ namespace Model.Vm
         public string Message { get; set; }
         [Required]
         public string EmailFrom { get; set; }
+        [Required]
+        public string FromId { get; set; }
+        [Required]
+        public string ApplicationUserId { get; set; }
     }
 }

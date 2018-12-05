@@ -32,5 +32,18 @@ namespace Service
                 return false;
             }
         } 
+
+        public bool Exist(string id)
+        {
+            try
+            {
+                _dbContext.ApplicationUsers.First(x => x.Id == id);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -24,5 +24,7 @@ namespace Repository
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
         public DbSet<FreelancerHability> FreelancerHabilities { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
     }
 }

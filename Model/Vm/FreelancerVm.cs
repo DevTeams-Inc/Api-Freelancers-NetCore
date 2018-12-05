@@ -19,7 +19,7 @@ namespace Model.Vm
         public string Interest { get; set; }
         public int Level { get; set; }
         
-        public string Historial { get; set; }
+        public string Address { get; set; }
         public int Rating { get; set; }
         public string Profesion { get; set; }
 

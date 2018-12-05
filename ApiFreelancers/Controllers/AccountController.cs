@@ -152,7 +152,7 @@ namespace ApiTokenJWT.Controllers
                 new Claim(JwtRegisteredClaimNames.UniqueName, model.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-               //creanos una llave secreta y la configuramos como variable de entorno
+            //creanos una llave secreta y la configuramos como variable de entorno
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Secret_Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             //le colocamos un tiempo de expiracion en este caso 1 hora
@@ -160,8 +160,8 @@ namespace ApiTokenJWT.Controllers
 
 
             //preparamos el modelo
-              model.Password = null;
-              
+            model.Password = null;
+
 
             JwtSecurityToken token = new JwtSecurityToken(
                issuer: "yourdomain.com",
@@ -188,7 +188,7 @@ namespace ApiTokenJWT.Controllers
             {
                 string avatar = await _imageHandler.UploadImage(file);
                 var model = new UpdateByFreelancerUserVm
-                { 
+                {
                     Id = id,
                     Avatar = avatar
                 };
@@ -200,5 +200,19 @@ namespace ApiTokenJWT.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        [Route("exist/{id}")]
+        public IActionResult GetById(string id)
+        {
+            var model = _accountService.Exist(id);
+            if (model)
+            {
+                return Ok(model);
+            }
+            else
+            {
+                return BadRequest("No existe este usuario");
+            }
+        }
     }
 }

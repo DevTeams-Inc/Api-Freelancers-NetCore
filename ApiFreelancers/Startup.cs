@@ -42,6 +42,7 @@ namespace ApiFreelancers
             services.AddTransient<IProposalService , ProposalService>();
             services.AddTransient<IAnswersService , AnswersService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IContactService, ContactService>();
             //reaparar
             services.AddTransient<IImageWriter, ImageService>();
 
