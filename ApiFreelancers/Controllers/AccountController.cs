@@ -76,12 +76,12 @@ namespace ApiTokenJWT.Controllers
                     }
                     else
                     {
-                        return BadRequest("Email invalid");
+                        return BadRequest("Correo invalido");
                     }
                 }
                 else
                 {
-                    return BadRequest("Username or password invalid");
+                    return BadRequest("Ya existe un usuario con esta cuenta");
                 }
             }
             else
@@ -187,12 +187,24 @@ namespace ApiTokenJWT.Controllers
             if (file != null && id != null)
             {
                 string avatar = await _imageHandler.UploadImage(file);
+                var user = _accountService.GetById(id);
                 var model = new UpdateByFreelancerUserVm
                 {
                     Id = id,
-                    Avatar = avatar
+                    Avatar = avatar,
+                    Address = user.Address,
+                    PhoneNumber = user.PhoneNumber
                 };
-                return Ok(_accountService.UpdateByFreelancer(model));
+                if (model.Avatar != "Invalid image file")
+                {
+
+                    return Ok(_accountService.UpdateByFreelancer(model));
+
+                }
+                else
+                {
+                    return BadRequest("Este tipo de archivo no es admitido");
+                }
             }
             else
             {
@@ -213,6 +225,47 @@ namespace ApiTokenJWT.Controllers
             {
                 return BadRequest("No existe este usuario");
             }
+        }
+
+        [HttpPost]
+        [Route("pass/recovery")]
+        public IActionResult RecoveryPass([FromBody] ChangePassVm email)
+        {
+            var model = _accountService.GetByEmail(email.Email);
+
+            if (model != null)
+            {   var result = _accountService.RecoveryPass(model.Email,model.Id);
+                if (result)
+                {
+                    return Ok(result);
+                }
+                return BadRequest("No se ha podido enviar el email, intente de nuevo");
+            }
+            else
+            {
+                return BadRequest("Este correo no existe");
+            }
+        }
+
+        [HttpPost]
+        [Route("pass/change")]
+        public async Task<IActionResult> ChangePass([FromBody] ChangePassVm model)
+        {
+            var user = _accountService.GetById(model.Id);
+                // traemos el hash nuevo
+            var newpass =  _userManager.PasswordHasher.HashPassword(user, model.NewPass);
+            // se lo pasamos al user y luego actualizamos
+            user.PasswordHash = newpass;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest("No se ha podido cambiar la contraseña");
+            }
+
         }
     }
 }

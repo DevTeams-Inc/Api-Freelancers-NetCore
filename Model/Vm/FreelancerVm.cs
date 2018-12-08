@@ -38,6 +38,5 @@ namespace Model.Vm
 
         public List<Hability> Habilities { get; set; }
 
-
     }
 }

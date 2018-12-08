@@ -20,7 +20,7 @@ namespace Model
         public string Interest { get; set; }
         public int Level { get; set; }
         [StringLength(255)]
-        public string Historial { get; set; }
+        public string Address { get; set; }
         public int Rating { get; set; }
         [StringLength(255)]
         public string Profesion { get; set; }

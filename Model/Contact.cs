@@ -9,11 +9,12 @@ namespace Model
     {
         public int Id { get; set; }
         [Required]
-        public string FromId { get; set; }
+        public int FreelancerId { get; set; }
         [Required]
         public string ApplicationUserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        public Freelancer Freelancer { get; set; }
 
     }
 }

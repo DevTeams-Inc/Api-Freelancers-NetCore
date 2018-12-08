@@ -261,12 +261,13 @@ namespace Persistence.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("FromId")
-                        .IsRequired();
+                    b.Property<int>("FreelancerId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("FreelancerId");
 
                     b.ToTable("Contacts");
                 });
@@ -277,15 +278,15 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(255);
+
                     b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("Biography")
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("Historial")
-                        .HasMaxLength(255);
 
                     b.Property<string>("Interest")
                         .HasMaxLength(100);
@@ -440,7 +441,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired();
 
                     b.Property<string>("Comment");
 
@@ -522,6 +524,11 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Model.Freelancer", "Freelancer")
+                        .WithMany()
+                        .HasForeignKey("FreelancerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Model.Freelancer", b =>
@@ -582,7 +589,8 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Model.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Model.Freelancer", "Freelancer")
                         .WithMany()

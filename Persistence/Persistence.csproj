@@ -8,6 +8,8 @@
     <Compile Remove="Migrations\20181116054105_Initialize.cs" />
     <Compile Remove="Migrations\20181117203716_AnswersFreelancer.cs" />
     <Compile Remove="Migrations\20181205043232_AddRating.cs" />
+    <Compile Remove="Migrations\20181207180106_RatingToFreelancer.cs" />
+    <Compile Remove="Migrations\20181207180316_RatingToFreelancer.cs" />
   </ItemGroup>
 
   <ItemGroup>

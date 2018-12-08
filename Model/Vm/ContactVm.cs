@@ -7,6 +7,7 @@ namespace Model.Vm
 {
     public class ContactVm
     {
+        public int Id { get; set; }
         [Required]
         public string EmailDestiny { get; set; }
         [Required]
@@ -15,9 +16,10 @@ namespace Model.Vm
         public string Message { get; set; }
         [Required]
         public string EmailFrom { get; set; }
-        [Required]
+
         public string FromId { get; set; }
-        [Required]
+        public int FreelancerId { get; set; }
+
         public string ApplicationUserId { get; set; }
     }
 }

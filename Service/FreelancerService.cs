@@ -20,8 +20,9 @@ namespace Service
         private readonly IHabilityService _habilityService;
         private readonly IAccountService _accountService;
         private readonly IContactService _contactService;
-        //private readonly string _imgServer = $"http://localhost:57455/img/";
-        private readonly string _imgServer = $"http://192.168.1.139:45455/img/";
+        private readonly string _imgServer = $"http://192.168.137.103:45455/img/";
+        //private readonly string _imgServer = $"http://192.168.1.139:45455/img/";
+        //private readonly string _imgServer = $"http://192.168.96.117:45455/img/";
 
         private readonly DateTime _dateTime;
         public FreelancerService(ApplicationDbContext dbContext,
@@ -57,7 +58,7 @@ namespace Service
                     CreatedAt = _dateTime,
                     ApplicationUserId = entity.ApplicationUserId,
                     Biography = entity.Biography,
-                    Historial = entity.Address,
+                    Address = entity.Address,
                     Interest = entity.Interest,
                     Lenguaje = entity.Lenguaje,
                     Level = entity.Level,
@@ -99,8 +100,12 @@ namespace Service
             try
             {
                 var model = _dbContext.Freelancers.First(x => x.Id == id);
-                _dbContext.Freelancers.Remove(model);
-                _dbContext.SaveChanges();
+                if (_accountService.Delete(model.ApplicationUserId))
+                {
+                    _dbContext.Freelancers.Remove(model);
+                    _dbContext.SaveChanges();
+                }
+                
                 return true;
             }
             catch (Exception)
@@ -247,7 +252,7 @@ namespace Service
                 result.Biography = freelancer.Biography;
                 result.Interest = freelancer.Interest;
                 result.Level = freelancer.Level;
-                result.Address = freelancer.ApplicationUser.Address;
+                result.Address = user.Address;
                 result.Rating = freelancer.Rating;
                 result.Profesion = freelancer.Profesion;
                 result.Name = user.Name;
@@ -256,14 +261,16 @@ namespace Service
                 result.Lat = freelancer.Lat;
                 result.Long = freelancer.Long;
                 result.Email = user.Email;
-                result.PhoneNumber = user.PhoneNumber; 
+                result.PhoneNumber = user.PhoneNumber;
                 result.ApplicationUserId = user.Id;
                 var h = new List<Hability>();
-                foreach (var i in freelancer.Habilities )
+                var r = new List<Rating>();
+                foreach (var i in freelancer.Habilities)
                 {
                     h.Add(_habilityService.GetById(i.HabilityId));
                 }
                 result.Habilities = h;
+ 
             }
             catch (Exception)
             {
@@ -306,6 +313,7 @@ namespace Service
                 result.PhoneNumber = user.PhoneNumber;
                 result.ApplicationUserId = user.Id;
                 var h = new List<Hability>();
+
                 foreach (var i in freelancer.Habilities)
                 {
                     h.Add(_habilityService.GetById(i.HabilityId));
@@ -393,7 +401,7 @@ namespace Service
                             Profesion = i.Profesion,
                             Name = user.Name,
                             LastName = user.LastName,
-                            Avatar = $"http://localhost:57455/img/{user.Avatar}",
+                            Avatar = $"{_imgServer}{user.Avatar}",
                             Lat = i.Lat,
                             Long = i.Long,
                             Email = user.Email,
@@ -519,12 +527,17 @@ namespace Service
                 try
                 {
                     user.Send(mssg);
-                    Contact contact = new Contact
+                    if (model.ApplicationUserId != null && model.FreelancerId > 0)
                     {
-                        ApplicationUserId = model.ApplicationUserId,
-                        FromId = model.FromId
-                    };
-                    _contactService.Add(contact);
+                        Contact contact = new Contact
+                        {
+                            ApplicationUserId = model.ApplicationUserId,
+                            FreelancerId = model.FreelancerId,
+                            CreatedAt = _dateTime
+                        };
+                        _contactService.Add(contact);
+                    }
+                    
                 }
                 catch (Exception)
                 {
@@ -600,7 +613,7 @@ namespace Service
                     Profesion = final.Profesion,
                     Long = final.Long,
                     Lat = final.Lat,
-
+                    Address = final.ApplicationUser.Address,
                     Rating = final.Rating,
                     Email = final.ApplicationUser.Email
                 };

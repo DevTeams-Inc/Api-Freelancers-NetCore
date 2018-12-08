@@ -15,14 +15,14 @@ namespace ApiFreelancers.Controllers
 {
     [Produces("application/json")]
     [Route("api/freelancers")]
-  //  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FreelancerController : Controller
     {
         private readonly IFreelancerService _freelancer;
         private readonly IImageWriter _imageHandler;
         private readonly IFreelancerHabilityService _freelancerHabilityService;
-        public FreelancerController(IFreelancerService freelancer ,
-            IImageWriter imageHandler ,
+        public FreelancerController(IFreelancerService freelancer,
+            IImageWriter imageHandler,
             IFreelancerHabilityService freelancerHabilityService)
         {
             _freelancer = freelancer;
@@ -149,7 +149,12 @@ namespace ApiFreelancers.Controllers
         [Route("exist/{id}")]
         public IActionResult UserExist(string id)
         {
-              return Ok(_freelancer.UserExist(id));
+            var model = _freelancer.UserExist(id);
+            if (model)
+            {
+                return Ok(model);
+            }
+            return BadRequest("Este usuario no existe");
         }
 
         [HttpGet]
@@ -165,6 +170,16 @@ namespace ApiFreelancers.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = _freelancer.GetByIdUser(model.FromId);
+                try
+                {
+                    model.FreelancerId = user.Id;
+                }
+                catch (Exception)
+                {
+
+                    model.FreelancerId = 0;
+                }
                 return Ok(_freelancer.Contact(model));
             }
             else
@@ -203,5 +218,7 @@ namespace ApiFreelancers.Controllers
         {
             return Ok(_freelancer.Filter(idHability, rate));
         }
+
+        
     }
 }

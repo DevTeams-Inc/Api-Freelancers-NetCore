@@ -81,8 +81,15 @@ namespace ApiFreelancers.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
-        {
-            return Ok(_proyect.Delete(id));
+        { var model = _proyect.Delete(id);
+            if (model)
+            {
+                return Ok(model);
+            }
+            else
+            {
+                return BadRequest("No se ha eliminado el proyecto");
+            }
         }
     }
 }

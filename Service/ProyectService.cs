@@ -52,9 +52,17 @@ namespace Service
         {
             try
             {
-                var prop = _dbContext.Proposals.First(x => x.ProyectId == id);
-                _dbContext.Proposals.Remove(prop);
-                _dbContext.SaveChanges();
+                try
+                {
+                    var prop = _dbContext.Proposals.First(x => x.ProyectId == id);
+                    _dbContext.Proposals.Remove(prop);
+                    _dbContext.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                }
+
                 var model = _dbContext.Proyects.First(x => x.Id == id);
                 _dbContext.Remove(model);
                 _dbContext.SaveChanges();
@@ -108,7 +116,7 @@ namespace Service
                         Avatar = i.ApplicationUser.Avatar,
                         CategoryId = i.CategoryId,
                         NameCategory = i.Category.Name,
-                        CreatedAt = i.CreatedAt,
+                        CreatedAt = Convert.ToDateTime(i.CreatedAt.ToShortTimeString()),
                         Description = i.Description,
                         Price = i.Price,
                         //recuerda que mandaras una string
